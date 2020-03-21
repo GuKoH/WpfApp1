@@ -1,0 +1,841 @@
+﻿<Window x:Class="WpfApp1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+     TextElement.FontWeight="Regular"
+     TextElement.FontSize="16"
+     TextOptions.TextFormattingMode="Ideal"
+     TextOptions.TextRenderingMode="Auto"
+     Background="{DynamicResource MaterialDesignPaper}"
+     FontFamily="{DynamicResource MaterialDesignFont}"
+        mc:Ignorable="d"
+        Title="Крюинговые агенства" Height="450" Width="1229" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+    <Window.Resources>
+        <Color x:Key="Color_002">#FFBABABA</Color>
+        <!-- *********************************  BRUSHES  ********************************* -->
+        <SolidColorBrush x:Key="ForegroundBrush" Color="{StaticResource Color_002}" />
+        <!-- *********************************  Label Style  ********************************* -->
+        <Style x:Key="LabelStyle" TargetType="{x:Type Label}">
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="13.333" />
+            <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+        </Style>
+
+        <Color x:Key="Color_009">#FF181818</Color>
+
+        <SolidColorBrush x:Key="AccordionArrowExpandedBackgroundBrush" Color="{StaticResource Color_009}" />
+
+        <!--15% White-->
+        <Color x:Key="Color_016">#00FFFFFF</Color>
+        <SolidColorBrush x:Key="TransparentBrush" Color="{StaticResource Color_016}" />
+        <Color x:Key="Color_024">#FF00AADE</Color>
+        <!-- Need to change color or delete -->
+        <SolidColorBrush x:Key="ListBoxItemSelectedBackgroundBrush" Color="{StaticResource Color_024}" />
+        <!-- Need to change color or delete -->
+        <SolidColorBrush x:Key="ListBoxItemSelectedBorderBrush" Color="{StaticResource Color_024}" />
+        <SolidColorBrush x:Key="ListBoxItemPressedBorderBrush" Color="{StaticResource Color_024}" />
+
+        <SolidColorBrush x:Key="DisabledVisualElement" Color="{StaticResource Color_009}" Opacity="0.6" />
+        <Color x:Key="Color_006">#FF454545</Color>
+        <SolidColorBrush x:Key="ListBoxItemHoverBackgroundBrush" Color="{StaticResource Color_006}" />
+        <Color x:Key="Color_004">#FF747474</Color>
+        <SolidColorBrush x:Key="ListBoxItemHoverBorderBrush" Color="{StaticResource Color_004}" />
+        <Color x:Key="Color_001">#FFFFFFFF</Color>
+        <SolidColorBrush x:Key="LightForegroundBrush" Color="{StaticResource Color_001}" />
+
+        <Style x:Key="ListBoxItemStyle1" TargetType="{x:Type ListBoxItem}">
+            <Setter Property="Background" Value="{StaticResource TransparentBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
+            <Setter Property="FontSize" Value="14.667" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="MinHeight" Value="30" />
+            <Setter Property="Padding" Value="6,2" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                        <Grid>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="MouseOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Bd" Storyboard.TargetProperty="Fill">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ListBoxItemHoverBackgroundBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Bd" Storyboard.TargetProperty="Stroke">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ListBoxItemHoverBorderBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="contentControl">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource LightForegroundBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="DisabledVisualElement">
+                                                <DiscreteObjectKeyFrame KeyTime="0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <Visibility>Visible</Visibility>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="SelectionStates">
+                                    <VisualState x:Name="Unselected" />
+                                    <VisualState x:Name="Selected">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="BgSelected">
+                                                <DiscreteObjectKeyFrame KeyTime="0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <Visibility>Visible</Visibility>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="contentControl">
+                                                <DiscreteObjectKeyFrame KeyTime="0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <Visibility>Collapsed</Visibility>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="contentControl1">
+                                                <DiscreteObjectKeyFrame KeyTime="0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <Visibility>Visible</Visibility>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Duration="0" Storyboard.TargetProperty="Foreground" Storyboard.TargetName="contentControl1">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource LightForegroundBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="SelectedUnfocused">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="BgSelected">
+                                                <DiscreteObjectKeyFrame KeyTime="0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <Visibility>Visible</Visibility>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="contentControl">
+                                                <DiscreteObjectKeyFrame KeyTime="0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <Visibility>Collapsed</Visibility>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="contentControl1">
+                                                <DiscreteObjectKeyFrame KeyTime="0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <Visibility>Visible</Visibility>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Duration="0" Storyboard.TargetProperty="Foreground" Storyboard.TargetName="contentControl1">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource LightForegroundBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="FocusStates">
+                                    <VisualState x:Name="Focused">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="FocusedVisualElement">
+                                                <DiscreteObjectKeyFrame KeyTime="0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <Visibility>Visible</Visibility>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Unfocused" />
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Rectangle x:Name="Bd" Fill="{TemplateBinding Background}" />
+                            <Rectangle x:Name="BgSelected" Fill="{StaticResource ListBoxItemSelectedBackgroundBrush}" Stroke="{StaticResource ListBoxItemSelectedBorderBrush}" Visibility="Collapsed" />
+                            <ContentControl x:Name="contentControl" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="{TemplateBinding Padding}" Foreground="{TemplateBinding Foreground}">
+                                <ContentPresenter x:Name="contentPresenter" Height="69.333" />
+                            </ContentControl>
+                            <ContentControl x:Name="contentControl1" Visibility="Collapsed" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="{TemplateBinding Padding}" Foreground="{StaticResource ForegroundBrush}">
+                                <ContentPresenter x:Name="contentPresenter1" />
+                            </ContentControl>
+                            <Rectangle x:Name="FocusedVisualElement" IsHitTestVisible="False" Visibility="Collapsed" Stroke="{StaticResource ListBoxItemPressedBorderBrush}" StrokeThickness="2" />
+                            <Rectangle x:Name="DisabledVisualElement" Fill="{StaticResource DisabledVisualElement}" Visibility="Collapsed" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <Style x:Key="myButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <DataTemplate x:Key="MailBoxTempl">
+            <Grid Width="457.833" Height="78.333">
+                <Rectangle Fill="#FF2C2C32" HorizontalAlignment="Left" Height="75.333" Stroke="Black" VerticalAlignment="Top" Width="457.833" Margin="0" RadiusY="23.5" RadiusX="23.5"/>
+                <TextBlock HorizontalAlignment="Left" Margin="19,5,0,0" TextWrapping="WrapWithOverflow" Text="{Binding mailSubject}" VerticalAlignment="Top" Height="29" RenderTransformOrigin="0.5,0.5" Width="311" Foreground="#FF49ECBF" FontFamily="Century Gothic" FontSize="18" FontWeight="Bold">
+                    <TextBlock.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleY="1"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </TextBlock.RenderTransform>
+                </TextBlock>
+                <TextBlock Text="{Binding mailDate}" HorizontalAlignment="Left" Margin="279.333,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="19" RenderTransformOrigin="0.5,0.5" Width="159" Foreground="#FF49ECBF" FontFamily="Century Gothic" FontSize="14" TextAlignment="Right">
+                    <TextBlock.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleY="1"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </TextBlock.RenderTransform><Run Text="TextBlock"/></TextBlock>
+                <TextBlock HorizontalAlignment="Left" Margin="19,39,0,0" TextWrapping="WrapWithOverflow" Text="{Binding mailBody}" VerticalAlignment="Top" Height="30.667" RenderTransformOrigin="0.5,0.5" Width="431.833" Foreground="#FF49ECBF" FontFamily="Century Gothic" FontSize="10" FontWeight="Bold">
+                    <TextBlock.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleY="1"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </TextBlock.RenderTransform>
+                </TextBlock>
+            </Grid>
+        </DataTemplate>
+        <Style x:Key="ListBoxItemStyle2" TargetType="{x:Type ListBoxItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                        <Grid Width="400" Height="95"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid Background="{DynamicResource MaterialDesignPaper}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="290"/>
+            <ColumnDefinition Width="15"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0*"/>
+            <RowDefinition Height="66"/>
+            <RowDefinition/>
+            <RowDefinition Height="48"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <ListBox x:Name="myListBox" Style="{DynamicResource MaterialDesignCardsListBox}" materialDesign:ShadowAssist.ShadowDepth="Depth3" materialDesign:ShadowAssist.Darken="True" materialDesign:ShadowAssist.ShadowEdges="Bottom,Right" Margin="0,0,0,4" ItemTemplate="{DynamicResource myItemTemplate}" ItemContainerStyle="{DynamicResource ListBoxItemStyle1}"  Padding="0,1,0,0" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Grid.Row="2" Grid.RowSpan="2" >
+            <ListBox.Resources>
+                <DataTemplate x:Key="myItemTemplate">
+                    <DataTemplate.Resources>
+                        <Storyboard x:Key="OnMouseEnter1">
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="CompName">
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="-1"/>
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="-1.75"/>
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-2"/>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="CompName">
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="-6.75"/>
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="-9.5"/>
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-16.583"/>
+                            </DoubleAnimationUsingKeyFrames>
+                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="CompName">
+                                <EasingColorKeyFrame KeyTime="0:0:0.2" Value="#FF9BE8E8"/>
+                                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="Cyan"/>
+                            </ColorAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="CompName">
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0.73"/>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="rectangle">
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="31"/>
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Key="Storyboard1"/>
+                    </DataTemplate.Resources>
+                    <Grid Width="Auto" Height="65.333" Background="#FF2B2929" Margin="-4.959,0,-4.292,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="6*"/>
+                            <RowDefinition Height="7*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Rectangle Fill="#FF0DAAAA" HorizontalAlignment="Left" Height="Auto" Margin="43.737,34.39,0,-4.376" Grid.RowSpan="1" Stroke="#FF0DAAAA" VerticalAlignment="Stretch" Width="6.859" RenderTransformOrigin="0.5,0.5" Grid.Row="1">
+                            <Rectangle.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="1.228" ScaleY="0.943"/>
+                                    <SkewTransform AngleX="-58.605" AngleY="-4.768"/>
+                                    <RotateTransform Angle="4.575"/>
+                                    <TranslateTransform X="-37.437" Y="-0.744"/>
+                                </TransformGroup>
+                            </Rectangle.RenderTransform>
+                        </Rectangle>
+                        <Rectangle Fill="#FF0DAAAA" HorizontalAlignment="Left" Height="7.299" Margin="37.522,-2.354,0,0" Grid.RowSpan="1" Stroke="#FF0DAAAA" VerticalAlignment="Top" Width="6.86" RenderTransformOrigin="0.5,0.5" Grid.Row="0">
+                            <Rectangle.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="1.228" ScaleY="0.635"/>
+                                    <SkewTransform AngleX="73.578" AngleY="-4.768"/>
+                                    <RotateTransform Angle="5.05"/>
+                                    <TranslateTransform X="-27.844" Y="-1.295"/>
+                                </TransformGroup>
+                            </Rectangle.RenderTransform>
+                        </Rectangle>
+                        <Rectangle Fill="#FF423E3E" HorizontalAlignment="Left" Height="65.333" VerticalAlignment="Top" Width="200.503" Grid.ColumnSpan="1" Grid.RowSpan="2">
+                            <Rectangle.Stroke>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#FF817676" Offset="0"/>
+                                    <GradientStop Color="#FF665E5E" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Stroke>
+                        </Rectangle>
+                        <TextBlock x:Name="CompTel" Text="{Binding CompanyPhone}" HorizontalAlignment="Stretch" Margin="14.792,15.147,46.253,7.052" TextWrapping="Wrap" VerticalAlignment="Stretch" Width="Auto" FontSize="10" Foreground="#FF34899C" Grid.ColumnSpan="1" Height="Auto" Grid.Row="1"/>
+
+                        <TextBlock x:Name="CompEmail" Text="{Binding CompanyEmail}" HorizontalAlignment="Stretch" Margin="14.792,0,46.253,20.032" TextWrapping="Wrap" VerticalAlignment="Stretch" Grid.ColumnSpan="1" Width="Auto" FontSize="10" Foreground="#FF34899C" Height="Auto" Grid.Row="1"/>
+                        <TextBlock x:Name="Mark" Grid.Column="1" HorizontalAlignment="Stretch" Margin="22.176,13.467,23.135,14.609" TextWrapping="Wrap" VerticalAlignment="Stretch" FontFamily="Stencil" FontWeight="Bold" Foreground="#FF70E886" Height="Auto" Width="Auto" FontSize="36" TextAlignment="Center" Grid.RowSpan="2"/>
+                        <Rectangle x:Name="rectangle" Fill="#FF414146" HorizontalAlignment="Stretch" Height="65.333" VerticalAlignment="Top" Width="Auto" Stroke="{x:Null}" Margin="1.541,0,0,0" Grid.RowSpan="2" RenderTransformOrigin="0.5,0.5">
+                            <Rectangle.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Rectangle.RenderTransform>
+                        </Rectangle>
+                        <TextBlock x:Name="CompName" Text="{Binding CompanyName}" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center" Foreground="#FF9BE8E8" FontWeight="Bold" Width="185.711" Height="39.574" FontSize="24" Margin="0,14.425,0,11.334" Grid.RowSpan="2" RenderTransformOrigin="0.5,0.5"  >
+                            <TextBlock.BindingGroup>
+                                <BindingGroup/>
+                            </TextBlock.BindingGroup>
+                            <TextBlock.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </TextBlock.RenderTransform></TextBlock>
+                        <Rectangle Fill="#FF0DAAAA" HorizontalAlignment="Left" Height="71.52" Margin="-9.915,-3.02,0,-3.167" Grid.RowSpan="2" Stroke="#FF0DAAAA" VerticalAlignment="Top" Width="19.707"/>
+                    </Grid>
+                    <DataTemplate.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                            <BeginStoryboard x:Name="OnMouseEnter1_BeginStoryboard" Storyboard="{StaticResource OnMouseEnter1}"/>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="UIElement.MouseMove">
+                            <ResumeStoryboard BeginStoryboardName="OnMouseEnter1_BeginStoryboard"/>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                            <StopStoryboard BeginStoryboardName="OnMouseEnter1_BeginStoryboard"/>
+                        </EventTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </ListBox.Resources>
+
+        </ListBox>
+        <StackPanel Orientation="Horizontal" Height="40" VerticalAlignment="Center" Margin="0,3,0,5" Grid.Row="3">
+            <Button
+  Style="{StaticResource MaterialDesignFloatingActionLightButton}" materialDesign:ShadowAssist.ShadowDepth="Depth5"
+  ToolTip="MaterialDesignFloatingActionLightButton" Margin="10,0,0,0" Width="40" Height="40" Click="Button_Click_2">
+                <materialDesign:PackIcon
+    Kind="Add"
+    Height="24"
+    Width="24" />
+            </Button>
+            <Button
+  Style="{StaticResource MaterialDesignFloatingActionLightButton}" materialDesign:ShadowAssist.ShadowDepth="Depth5"
+  ToolTip="MaterialDesignFloatingActionLightButton" Margin="20,0,0,0" Width="40" Height="40" Click="Button_Click">
+                <materialDesign:PackIcon
+    Kind="Delete"
+    Height="24"
+    Width="24" />
+            </Button>
+        </StackPanel>
+
+        <Grid x:Name="Почта" Margin="0,5,0,0" Grid.Row="2" Background="#FF181818" DataContext="{Binding SelectedItem, ElementName=MailBox}" Grid.Column="1" Grid.RowSpan="3" d:IsHidden="True" Grid.ColumnSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="38*"/>
+                <RowDefinition Height="345*"/>
+            </Grid.RowDefinitions>
+            <DockPanel DataContext="{Binding SelectedItem, ElementName=myListBox}" HorizontalAlignment="Left" Height="36" LastChildFill="False" VerticalAlignment="Top" Width="492">
+                <Label Content="Фильтр" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FF92B9E0" FontWeight="Bold" FontFamily="Century Gothic" FontSize="24"/>
+                <TextBox x:Name="textFrom" HorizontalAlignment="Left" Height="42" TextWrapping="Wrap" Text="{Binding CompEmail, Mode=OneWay}" VerticalAlignment="Center" Width="373.5" Margin="11,0,0,-6" Background="{x:Null}" Foreground="#FF92B3CC" BorderBrush="{x:Null}" FontFamily="Century Gothic" FontSize="24" Focusable="False"/>
+            </DockPanel>
+            <ListBox x:Name="MailBox" Margin="10,10,0,10" Grid.Row="1" ItemTemplate="{DynamicResource MailBoxTempl}" HorizontalAlignment="Left" Width="472" Background="{x:Null}" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderBrush="{x:Null}"/>
+            <Grid DataContext="{Binding SelectedItem, ElementName=MailBox}" HorizontalAlignment="Left" Height="325" Margin="525,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="482">
+                <Label Content="Тема" HorizontalAlignment="Left" Margin="10,4,0,-84.46" VerticalAlignment="Top" Foreground="#FF67DCE8"/>
+                <Label Content="{Binding mailSubject, Mode=OneWay}" HorizontalAlignment="Left" Margin="62,3,0,-84.5" VerticalAlignment="Top" Width="336" Foreground="#FF67DCE8" Height="26"/>
+                <RichTextBox Margin="10,34.96,0,10" Background="{x:Null}" Foreground="#FF51BEC3" BorderBrush="{x:Null}">
+                    <FlowDocument>
+                        <Paragraph>
+                            <Run Text="{Binding mailBody, Mode=OneWay}"/>
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+            </Grid>
+        </Grid>
+        <Grid x:Name="Отправить" Margin="0,5,0,0" Grid.Row="2" Background="#FF181818" Grid.Column="1" Grid.RowSpan="3" d:IsHidden="True" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="118*"/>
+                <ColumnDefinition Width="5*"/>
+            </Grid.ColumnDefinitions>
+            <DockPanel DataContext="{Binding SelectedItem, ElementName=myListBox}" HorizontalAlignment="Left" Height="35.96" LastChildFill="False" VerticalAlignment="Top" Width="492" Grid.ColumnSpan="2">
+                <Label Content="Кому" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FF92B9E0" FontWeight="Bold" FontFamily="Century Gothic" FontSize="24"/>
+                <TextBox x:Name="textTo" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding CompEmail, Mode=OneTime}" VerticalAlignment="Center" Width="387" Margin="11,6.48,0,6.48"/>
+            </DockPanel>
+            <DockPanel DataContext="{Binding SelectedItem, ElementName=myListBox}" HorizontalAlignment="Left" Height="35.96" LastChildFill="False" VerticalAlignment="Top" Width="492" Grid.ColumnSpan="2" Margin="0,40.96,0,0">
+                <Label Content="Тема" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FF92B9E0" FontWeight="Bold" FontFamily="Century Gothic" FontSize="24" Margin="4,0,0,0"/>
+                <TextBox x:Name="textSubject" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Center" Width="387" Margin="11,6.48,0,6.48" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+            </DockPanel>
+            <Grid HorizontalAlignment="Left" Height="342.04" Margin="10,40.96,0,0" VerticalAlignment="Top" Width="472" Grid.ColumnSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="39*"/>
+                    <RowDefinition Height="254*"/>
+                    <RowDefinition Height="49*"/>
+                </Grid.RowDefinitions>
+                <Button Content="Отправить" HorizontalAlignment="Left" Margin="387,10,0,0" Grid.Row="2" VerticalAlignment="Top" Width="75" HorizontalContentAlignment="Center" Click="Button_Click_5"/>
+            </Grid>
+            <TextBox x:Name="textBody" HorizontalAlignment="Left" Height="244" Margin="10,82,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="452"/>
+        </Grid>
+
+        <Grid x:Name="Добавить" DataContext="{Binding SelectedItem, ElementName=myListBox}" Margin="0,5,0,0" Grid.Row="2" Grid.Column="1" Grid.RowSpan="3" Grid.ColumnSpan="2" d:IsHidden="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="74*"/>
+                <ColumnDefinition Width="73*"/>
+                <ColumnDefinition Width="174*"/>
+                <ColumnDefinition Width="258*"/>
+                <ColumnDefinition Width="352*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="189"/>
+                <RowDefinition Height="31"/>
+                <RowDefinition Height="64"/>
+
+            </Grid.RowDefinitions>
+            <TextBox x:Name="company1" HorizontalAlignment="Left" Margin="24,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF356BFB" FontWeight="Bold" FontSize="36" Text="" Width="385" Height="46" Grid.ColumnSpan="4" TabIndex="1"/>
+            <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Top" Height="162">
+                <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="2">
+                    <TextBlock HorizontalAlignment="Center" Margin="0" Grid.Row="1" TextWrapping="Wrap" FontSize="14" Width="37" Grid.Column="1" VerticalAlignment="Center" Height="16"><Run Text="Email:"/></TextBlock>
+                    <TextBox x:Name="infoEmail1" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Height="20" Width="211" Text="" TabIndex="2"/>
+
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Height="20" Width="44"><Run Text="Phone:"/></TextBlock>
+                    <TextBox x:Name="infoPhone1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Height="20" Width="204" Foreground="#FF356BFB" Text="" TabIndex="3"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Height="20" Width="22" Text="Url:"/>
+                    <TextBox x:Name="infoUrl1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Height="20" Width="226" Foreground="#FF356BFB" Text=""/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Height="20" Width="42" Text="Адрес:"/>
+                    <TextBox x:Name="infoAddress1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Height="20" Width="205" Foreground="#FF356BFB" Text=""/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Height="20">
+                    <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Height="20" Width="51" Text="Город:"/>
+                    <TextBox x:Name="infoCity1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Height="20" Width="205" Foreground="#FF356BFB" Text=""/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Height="20">
+                    <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Height="20" Width="56" Text="Страна:"/>
+                    <TextBox x:Name="infoCountry" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Height="20" Width="191" Foreground="#FF356BFB" Text=""/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Height="20">
+                    <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Height="20" Width="56" Text="Анкета"/>
+                    <TextBox x:Name="infoAnketa" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Height="20" Width="191" Foreground="#FF356BFB" Text=""/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="3" VerticalAlignment="Top" Height="220" Margin="20,0,0,0" Grid.RowSpan="2">
+                <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="2">
+                    <TextBlock HorizontalAlignment="Center" Margin="0" Grid.Row="1" TextWrapping="Wrap" FontSize="14" Width="62" Grid.Column="1" VerticalAlignment="Center" Height="16" Text="Manager:" />
+                    <TextBox x:Name="managerName" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Height="20" Width="211" Text="" TabIndex="2"/>
+
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Height="20" Width="44"><Run Text="Phone:"/></TextBlock>
+                    <TextBox x:Name="managerPhone" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Height="20" Width="204" Foreground="#FF356BFB" Text="" TabIndex="3"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Height="20" Width="38" Text="Email:"/>
+                    <TextBox x:Name="managerEmail" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Height="20" Width="199" Foreground="#FF356BFB" Text="" TabIndex="4"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical">
+                    <Image x:Name="CompLogo" HorizontalAlignment="Center" Height="100" Margin="0,15,90,0" VerticalAlignment="Top" Width="100"/>
+                    <Button x:Name="loadLogo" Style="{DynamicResource MaterialDesignIconButton}" VerticalAlignment="Center" HorizontalAlignment="Center" Height="43" Margin="83,0,69,0" Width="86" Click="loadLogo_Click">
+                        <materialDesign:PackIcon Kind="Upload" Width="40" Height="40" />
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+            <Button  Content="Добавить" HorizontalAlignment="Center" Margin="25,3,25,2" Grid.Row="2" VerticalAlignment="Center" Width="124" Click="Button_Click_1" Height="26" Grid.Column="2"/>
+        </Grid>
+        <Grid x:Name="Парсер" Margin="3,0,2,0" Grid.Row="2" Grid.RowSpan="2" Grid.Column="2" d:IsHidden="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="16*"/>
+
+                <ColumnDefinition Width="262*"/>
+                <ColumnDefinition Width="279*"/>
+                <ColumnDefinition Width="365*"/>
+                <ColumnDefinition Width="16*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="19*"/>
+
+
+
+
+                <RowDefinition Height="100*"/>
+                <RowDefinition Height="55*"/>
+                <RowDefinition Height="125*"/>
+                <RowDefinition Height="54*"/>
+            </Grid.RowDefinitions>
+            <ListBox x:Name="ParserBox" materialDesign:ShadowAssist.ShadowDepth="Depth3" Style="{DynamicResource MaterialDesignListBox}" Grid.Row="1" Grid.Column="3" Grid.RowSpan="4" Margin="0,0,0,11" />
+            <materialDesign:Card  materialDesign:ShadowAssist.ShadowDepth="Depth3" materialDesign:ShadowAssist.ShadowEdges="All" Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Margin="9,0,11,0" VerticalAlignment="Center" >
+                <StackPanel x:Name="ParseFound" Orientation="Vertical" VerticalAlignment="Top" Grid.RowSpan="3" Height="154" Grid.ColumnSpan="2" Margin="10,4,0,-15" Grid.Row="1" Grid.Column="1">
+                    <StackPanel Orientation="Horizontal" Height="24">
+                        <materialDesign:PackIcon Kind="Company" VerticalAlignment="Center" Width="20" Height="20"/>
+                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="14" Width="48" VerticalAlignment="Center" Height="20" Margin="7,0,0,0"><Run Text="Name:"/></TextBlock>
+
+                        <TextBlock x:Name="txName" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Height="20" Width="174" Margin="2,0,0,0"><Run Text="{Binding CompEmail, Mode=OneWay}"/></TextBlock>
+
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Height="24">
+                        <materialDesign:PackIcon Kind="Email" VerticalAlignment="Center" Width="20" Height="20"/>
+                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="14" Width="48" VerticalAlignment="Center" Height="20" Margin="7,0,0,0"><Run Text="Email:"/></TextBlock>
+
+                        <TextBlock x:Name="txEmail" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Height="20" Width="174" Margin="2,0,0,0"><Run Text="{Binding CompEmail, Mode=OneWay}"/></TextBlock>
+
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Height="24">
+                        <materialDesign:PackIcon Kind="Phone" Width="20" Height="20" VerticalAlignment="Center" />
+                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Height="20" Width="48" Margin="7,0,0,0"><Run Text="Phone:"/></TextBlock>
+                        <TextBlock x:Name="txTel" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Height="20" Width="174"><Run Text="{Binding CompTel, Mode=OneWay}"/></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Height="24">
+                        <materialDesign:PackIcon Kind="Web" Width="20" Height="20" VerticalAlignment="Center"/>
+                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Height="20" Width="48" Text="Url:" Margin="7,0,0,0"/>
+                        <TextBlock x:Name="txUrl" HorizontalAlignment="Left" Margin="0" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Height="20" Width="174"><Run Text="{Binding CompUrl, Mode=OneWay}"/></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Height="50">
+                        <materialDesign:PackIcon Kind="AddressMarker" Width="20" Height="20" VerticalAlignment="Top"/>
+                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Height="20" Width="54.612" Text="Адрес:" Margin="7,5,0,0"/>
+                        <TextBlock x:Name="txCity" HorizontalAlignment="Left" Margin="0,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Height="45" Width="215"><Run Text="{Binding CompAddress, Mode=OneWay}"/></TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </materialDesign:Card>
+            <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" Margin="7,5,12,0">
+                <StackPanel Orientation="Horizontal" Height="45">
+                    <materialDesign:PackIcon Kind="PlayArrow" VerticalAlignment="Center" />
+                    <ComboBox x:Name="StartPage"
+  materialDesign:HintAssist.Hint="Начальная страница"
+  MinWidth="50                         "
+  Margin="16,0,0,0"
+  ItemsSource="{Binding LongListToTestComboVirtualization}"
+  Style="{StaticResource MaterialDesignFloatingHintComboBox}" Width="174.612" FontSize="16" VerticalAlignment="Stretch">
+                        <ComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ComboBox.ItemsPanel>
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Height="50">
+                    <materialDesign:PackIcon Kind="Stop" VerticalAlignment="Center" />
+                    <ComboBox x:Name="EndPage"
+                        materialDesign:HintAssist.Hint="Последняя страница"
+                        MinWidth="50                         "
+                        Margin="16,0,0,0"
+                        ItemsSource="{Binding LongListToTestComboVirtualization, Mode=OneTime}"
+                        Style="{StaticResource MaterialDesignFloatingHintComboBox}" Width="174.612" FontSize="16" VerticalAlignment="Stretch">
+                        <ComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ComboBox.ItemsPanel>
+                    </ComboBox>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Grid.ColumnSpan="2" Margin="0,0,10,0" Grid.RowSpan="3" Grid.Row="2">
+                <TextBox x:Name="txWeb"
+    Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
+    VerticalAlignment="Top"
+    AcceptsReturn="True"
+    TextWrapping="Wrap"
+    MaxWidth="400"
+    materialDesign:HintAssist.Hint="Введи название сайта..." />
+                <TextBox x:Name="txWeb1"
+    Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+    Margin="0"
+    VerticalAlignment="Top"
+    Height="100"
+    AcceptsReturn="True"
+    TextWrapping="Wrap"
+    VerticalScrollBarVisibility="Auto"
+    materialDesign:HintAssist.Hint="Введи часть ссылки до номера страницы..." />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="21,40,5,7" Width="250">
+                <TextBlock
+      Margin="0,0,8,0"
+      VerticalAlignment="Center"><Run Text="Начать сканирование:"/></TextBlock>
+                <Button
+      Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+      Margin="8 0 0 0"
+      Command="{Binding SaveCommand}"
+      materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsSaving}"
+      materialDesign:ButtonProgressAssist.Value="{Binding SaveProgress}" Grid.Row="4" Grid.Column="2" Click="Button_Click_6">
+                    <!-- simple example of toggling/animating pack icon with a data trigger-->
+                    <materialDesign:PackIcon
+        Height="24"
+        Width="24" Kind="Search">
+
+                    </materialDesign:PackIcon>
+                </Button>
+            </StackPanel>
+            <ProgressBar x:Name="Progress" Style="{DynamicResource MaterialDesignLinearProgressBar}" Grid.Column="2" Grid.Row="5" Width="266"/>
+        </Grid>
+
+        <Grid x:Name="Инфо" Background="{DynamicResource MaterialDesignCardBackground}" DataContext="{Binding SelectedItem, ElementName=myListBox}" Margin="2,0,0,0" Grid.Row="2" Grid.Column="1" Grid.RowSpan="3" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="38*"/>
+                <ColumnDefinition Width="105*"/>
+                <ColumnDefinition Width="361*"/>
+                <ColumnDefinition Width="425*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+
+
+
+
+                <RowDefinition Height="17*"/>
+                <RowDefinition Height="8*"/>
+                <RowDefinition Height="86*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.ColumnSpan="4" Margin="0" Grid.Row="1" VerticalAlignment="Top" Height="51">
+                <materialDesign:PackIcon Kind="Company" Margin="45,0,0,0" Width="50" Height="50" VerticalAlignment="Center"  />
+                <TextBlock x:Name="company" Style="{DynamicResource MaterialDesignCaptionTextBlock}" TextWrapping="Wrap" FontWeight="Bold" FontSize="36" Text="{Binding FullName}" Width="573" Margin="13,0,0,0" VerticalAlignment="Center" Height="60"/>
+
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.ColumnSpan="3" Margin="0,49,0,250" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Height="34" Grid.RowSpan="3">
+                <TextBlock x:Name="shortName" Style="{DynamicResource MaterialDesignCaptionTextBlock}" TextWrapping="Wrap" FontWeight="Bold" FontSize="16" Text="{Binding ShortName}" Width="573" Margin="13,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" Height="34"/>
+
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3">
+                <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" Height="178" Grid.ColumnSpan="2">
+                    <StackPanel Orientation="Horizontal" Height="30">
+                        <materialDesign:PackIcon Kind="Email" VerticalAlignment="Center" Width="20" Height="20"/>
+                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="18" Width="82" Margin="7,5,0,0"><Run Text="Email:"/></TextBlock>
+
+                        <TextBlock x:Name="infoEmail" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="337" Margin="2,0,0,0"><Run Text="{Binding Email, Mode=OneWay}"/></TextBlock>
+
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Height="30">
+                        <materialDesign:PackIcon Kind="Phone" Width="20" Height="20" VerticalAlignment="Center" />
+                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="82" Margin="7,0,0,0"><Run Text="Телефон"/><Run Text=":"/></TextBlock>
+                        <TextBlock x:Name="infoPhone" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="337"><Run Text="{Binding Phone, Mode=OneWay}"/></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Height="30">
+                        <materialDesign:PackIcon Kind="Web" Width="20" Height="20" VerticalAlignment="Center"/>
+                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="82" Text="WWW:" Margin="7,0,0,0"/>
+                        <TextBlock x:Name="infoUrl" HorizontalAlignment="Left" Margin="0" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="337"><Run Text="{Binding CompanyWeb, Mode=OneWay}"/></TextBlock>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal" Margin="0" VerticalAlignment="Center">
+                        <materialDesign:PackIcon Kind="Web" Width="20" Height="20" VerticalAlignment="Center"/>
+                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="82" Text="Страна:" Margin="7,0,0,0"/>
+                        <TextBlock x:Name="infoCity2" HorizontalAlignment="Left" Margin="0" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="25" Width="337"><Run Text="{Binding Country, Mode=OneWay}"/></TextBlock>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0" VerticalAlignment="Center">
+                        <materialDesign:PackIcon Kind="City" Width="20" Height="20" VerticalAlignment="Center"/>
+                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="82" Text="Город" Margin="7,0,0,0"/>
+                        <TextBlock x:Name="infoCity3" HorizontalAlignment="Left" Margin="0" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="25" Width="337"><Run Text="{Binding City, Mode=OneWay}"/></TextBlock>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0" VerticalAlignment="Top">
+                        <materialDesign:PackIcon Kind="AddressMarker" Width="20" Height="20" VerticalAlignment="Top"/>
+                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="18" Height="20" Width="82" Text="Адрес:" Margin="7,0,0,0"/>
+                        <TextBlock x:Name="infoCity" HorizontalAlignment="Left" Margin="0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="18" Height="70" Width="337"><Run Text="{Binding Address, Mode=OneWay}"/></TextBlock>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Height="30">
+                        <materialDesign:PackIcon Kind="Face" Width="20" Height="20" VerticalAlignment="Center"/>
+                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="82" Margin="7,0,0,0"><Run Text="Manager:"/></TextBlock>
+                        <TextBlock x:Name="infoManager" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="337"><Run Text="{Binding ManagerName, Mode=OneWay}"/></TextBlock>
+
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Height="30">
+                        <materialDesign:PackIcon Kind="Phone" Width="20" Height="20" VerticalAlignment="Center"/>
+                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="82" Margin="7,0,0,0" Text="Телефон:Ж"/>
+                        <TextBlock x:Name="infoManager1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="337"><Run Text="{Binding ManagerPhone, Mode=OneWay}"/></TextBlock>
+
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Height="30">
+                        <materialDesign:PackIcon Kind="Email" Width="20" Height="20" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
+                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="82" Margin="7,0,0,0" Text="Email:"/>
+                        <TextBlock x:Name="infoManager2" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="337"><Run Text="{Binding ManagerEmail, Mode=OneWay}"/></TextBlock>
+
+                    </StackPanel>
+
+                </StackPanel>
+            </StackPanel>
+            <DataGrid x:Name="DGView" Grid.ColumnSpan="3" HorizontalAlignment="Left" Height="100" Margin="10,106,0,0" Grid.Row="3" VerticalAlignment="Top" Width="369"/>
+        </Grid>
+        <materialDesign:ColorZone
+  Mode="PrimaryMid" VerticalAlignment="Top" Grid.Row="1" Grid.ColumnSpan="3" Height="66">
+            <StackPanel
+    Orientation="Horizontal"
+    Margin="2">
+                <materialDesign:ColorZone
+        Mode="Standard"
+        Padding="8 4 8 4"
+        CornerRadius="15"
+        Panel.ZIndex="1"
+        Margin="6,12,0,12"
+        materialDesign:ShadowAssist.ShadowDepth="Depth1" VerticalAlignment="Center" Height="38" Width="288">
+                    <Grid Margin="2,0,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+              Width="Auto" />
+                            <ColumnDefinition
+              Width="*" />
+                            <ColumnDefinition
+              Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Button
+            Style="{DynamicResource MaterialDesignToolButton}">
+                            <materialDesign:PackIcon
+              Kind="Magnify"
+              Opacity=".56" />
+                        </Button>
+                        <TextBox x:Name="SearchBox"
+            Grid.Column="1"
+            Margin="8 0 0 0"
+            materialDesign:HintAssist.Hint="Поиск по компаниям"
+            materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+            BorderThickness="0"
+            MinWidth="200"
+            VerticalAlignment="Center" TextChanged="SearchBox_TextChanged" />
+                        <Button
+            Style="{DynamicResource MaterialDesignToolButton}"
+            Grid.Column="2">
+                            <materialDesign:PackIcon
+              Kind="Microphone"
+              Opacity=".56"
+              Margin="8 0 0 0" />
+                        </Button>
+                    </Grid>
+                </materialDesign:ColorZone>
+                <RadioButton x:Name="Инфо1"
+                    Style="{StaticResource MaterialDesignTabRadioButton}"
+                    Margin="4,0"
+                    IsChecked="True" Height="Auto" Width="106" Checked="Button_Click_3"
+       >
+                    <materialDesign:PackIcon Kind="InfoCircle" Height="49" Width="66"/>
+                </RadioButton>
+                <RadioButton x:Name="Отправить1"
+                    Style="{StaticResource MaterialDesignTabRadioButton}"
+                    Margin="4,0"
+                    IsChecked="False" Height="Auto" Width="106" Checked="Button_Click_4"
+       >
+                    <materialDesign:PackIcon Kind="EmailSend" Height="49" Width="66"/>
+                </RadioButton>
+                <RadioButton x:Name="Получить"
+                    Style="{StaticResource MaterialDesignTabRadioButton}"
+                    Margin="4,0"
+                    IsChecked="False" Height="Auto" Width="106" Click="RecieveMail_Click"
+       >
+                    <materialDesign:PackIcon Kind="EmailOpen" Height="49" Width="66"/>
+                </RadioButton>
+                <RadioButton x:Name="Парсер2"
+      Style="{StaticResource MaterialDesignTabRadioButton}"
+      Margin="4,0"
+      IsChecked="False" Height="Auto" Width="106" Checked="btParser_Click"
+       >
+                    <materialDesign:PackIcon Kind="SearchAdd" Height="49" Width="66"/>
+                </RadioButton>
+            </StackPanel>
+        </materialDesign:ColorZone>
+        <materialDesign:ColorZone materialDesign:ShadowAssist.ShadowDepth="Depth3" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="4" Mode="PrimaryDark"  CornerRadius="5" Panel.ZIndex="1" Margin="0,0,0,0" VerticalAlignment="Stretch">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
+                <materialDesign:PackIcon x:Name="GlobalSqlStatus" Kind="CheckboxBlankCircle" Width="20" Height="20" VerticalAlignment="Center"/>
+                <TextBlock Text="Global DB" FontSize="16" Width="75" VerticalAlignment="Center" Margin="0,6"/>
+                <TextBlock x:Name="glCount" FontSize="16" Width="75" VerticalAlignment="Center" Margin="15,6,0,6"/>
+                <materialDesign:PackIcon x:Name="LocalSqlStatus" Kind="CheckboxBlankCircle" Width="20" Height="20" VerticalAlignment="Center" Margin="50,0,0,0"/>
+                <TextBlock Text="Local DB" FontSize="16" Width="66" VerticalAlignment="Center" Margin="0,6"/>
+                <TextBlock x:Name="lcCount" FontSize="16" Width="75" VerticalAlignment="Center" Margin="15,6,0,6"/>
+
+            </StackPanel>
+        </materialDesign:ColorZone>
+    </Grid>
+</Window>
