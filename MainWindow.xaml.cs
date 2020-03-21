@@ -32,15 +32,15 @@ namespace WpfApp1
         SqlConnection globalSqlConnection;
         ParseWorker<string[]> Parser;
         TaskParser<string[]> TaskParser;
-        //TaskParser<string[]> korabelParser;
-        //ParseWorker<string[]> korabelPar;
         List<string> myList;
         ParserResult parserResult;
         char[] myChar2;
         string[] LongListToTestComboVirtualization;
         DataTable dt;
         DataSet1.CompaniesDataTable companiesDT;
-
+        DataSet1TableAdapters.CompaniesTableAdapter companiesTableAdapter;
+        DataView dataView;
+        DataSet1 dataSet1;
         #endregion
 
         public MainWindow()
@@ -52,18 +52,8 @@ namespace WpfApp1
             TaskParser = new TaskParser<string[]>(new taskParser());
             TaskParser.OnComplitedTask += TaskParser_OnComplitedTask;
             TaskParser.OnNewTask += TaskParser_OnNewTask;
-            //korabelParser = new TaskParser<string[]>(new taskParserkorabel());
-            //korabelPar = new ParseWorker<string[]>(new targetParserKor());           
-            //korabelPar.OnComplited += Parser_OnComplited;
-            //korabelPar.OnNewData += Parser_OnNewData;
-            //korabelParser.OnComplitedTask += TaskParser_OnComplitedTask;
-            //korabelParser.OnNewTask += TaskParser_OnNewTask;
             myList = new List<string>();
-            LongListToTestComboVirtualization = new string[100];
-            int i = 0;
-           for (i = 0; i < 100; i++) LongListToTestComboVirtualization[i] = ((int)(i+1)).ToString();
-            StartPage.ItemsSource = LongListToTestComboVirtualization;
-            EndPage.ItemsSource = LongListToTestComboVirtualization;
+           
             GlobalSqlStatus.Foreground = Brushes.Red;
 
 
@@ -74,7 +64,7 @@ namespace WpfApp1
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             DelEntrie();
-            MySqlRefresh();
+            MyDataRefresh();
 
         }
 
@@ -104,84 +94,95 @@ namespace WpfApp1
                 GlobalSqlStatus.Foreground = Brushes.Red;
             }
 
-            MySqlRefresh();
-            DataSet1 dataSet1 = new DataSet1();
 
+            LongListToTestComboVirtualization = new string[100];
+            int i = 0;
+            for (i = 0; i < 100; i++) LongListToTestComboVirtualization[i] = ((int)(i + 1)).ToString();
+            StartPage.ItemsSource = LongListToTestComboVirtualization;
+            EndPage.ItemsSource = LongListToTestComboVirtualization;
+
+
+            dataSet1 = new DataSet1();
             companiesDT = new DataSet1.CompaniesDataTable();
-            DataSet1TableAdapters.CompaniesTableAdapter companiesTableAdapter = new DataSet1TableAdapters.CompaniesTableAdapter();
+            companiesTableAdapter = new DataSet1TableAdapters.CompaniesTableAdapter();
+            dataView = companiesDT.DefaultView;
             companiesTableAdapter.Fill(companiesDT);
             myListBox.ItemsSource = companiesDT;
-            
-            //companiesDT.DefaultView.Sort = "CompanyName";
-            DGView.ItemsSource = companiesDT.DefaultView;
-            
-            
+            dataView.RowFilter = $"CompanyName NOT LIKE ''";
+
+
+
         }
 
-        public void MySqlRefresh()
+        public void MyDataRefresh()
         {
-            myListBox.Items.Clear();
-            SqlDataReader SqlReader = null;
-            SqlCommand command = new SqlCommand("SELECT * FROM [Companies]", localSqlConnection);
 
-            try
-            {
-                SqlReader = command.ExecuteReader();
+            //SqlDataReader SqlReader = null;
+            //SqlCommand command = new SqlCommand("SELECT * FROM [Companies]", localSqlConnection);
 
-                while (SqlReader.Read())
-                {
-                    string fullname = SqlReader["CompanyName"].ToString();
-                    string shortname = SqlReader["ShortName"].ToString();
-                    string managername = SqlReader["Manager1Name"].ToString();
-                    string managerphone = SqlReader["Manager1Phone"].ToString();
-                    string manageremail = SqlReader["Manager1Email"].ToString();
-                    string email = SqlReader["CompanyEmail"].ToString();
-                    string phone = SqlReader["CompanyPhone"].ToString();
-                    string address = SqlReader["Address"].ToString();
-                    string companyweb = SqlReader["URL"].ToString();
-                    Image image = new Image();
-                    string country = SqlReader["Country"].ToString();
-                    string city = SqlReader["City"].ToString();
-                    string anketaurl = SqlReader["AnketaUrl"].ToString();
-       
-                    CompanyItem newClassItem = new CompanyItem();
-                    newClassItem.SetItem(fullname, shortname, managername, managerphone, manageremail,  email,  phone,  address,  companyweb, image,  country,  city,  anketaurl);
-                   // myListBox.Items.Add(newClassItem);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString());
-            }
-            finally
-            {
-                if (SqlReader != null)
-                {
-                    SqlReader.Close();
-                }
-            }
+            //try
+            //{
+            //    SqlReader = command.ExecuteReader();
+
+            //    while (SqlReader.Read())
+            //    {
+            //        string fullname = SqlReader["CompanyName"].ToString();
+            //        string shortname = SqlReader["ShortName"].ToString();
+            //        string managername = SqlReader["Manager1Name"].ToString();
+            //        string managerphone = SqlReader["Manager1Phone"].ToString();
+            //        string manageremail = SqlReader["Manager1Email"].ToString();
+            //        string email = SqlReader["CompanyEmail"].ToString();
+            //        string phone = SqlReader["CompanyPhone"].ToString();
+            //        string address = SqlReader["Address"].ToString();
+            //        string companyweb = SqlReader["URL"].ToString();
+            //        Image image = new Image();
+            //        string country = SqlReader["Country"].ToString();
+            //        string city = SqlReader["City"].ToString();
+            //        string anketaurl = SqlReader["AnketaUrl"].ToString();
+
+            //        CompanyItem newClassItem = new CompanyItem();
+            //        newClassItem.SetItem(fullname, shortname, managername, managerphone, manageremail,  email,  phone,  address,  companyweb, image,  country,  city,  anketaurl);
+            // myListBox.Items.Add(newClassItem);
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message.ToString(), ex.Source.ToString());
+            //}
+            //finally
+            //{
+            //    if (SqlReader != null)
+            //    {
+            //        SqlReader.Close();
+            //    }
+            //}
+            companiesTableAdapter.Fill(companiesDT);
+
         }
 
-     
+
         public void AddEntries(CompanyItem item) //Добавление записей
         {
-            //SqlCommand mycheck = new SqlCommand("SELECT Companies.CompanyName FROM Companies WHERE (Companies.CompanyName = @name)", localSqlConnection);
-            //mycheck.Parameters.AddWithValue("name", item.FullName);
-            //SqlDataReader mycheckreader = mycheck.ExecuteReader();
-            //int i = 0;
-            //while (mycheckreader.Read())
-            //{
-            //    i++;
-            //}
-            //if (i == 0)
-            //{
-
-            //    mycheckreader.Close();
-            try
+            DataSet1TableAdapters.CompaniesTableAdapter companiesNameMatchAdapter = new DataSet1TableAdapters.CompaniesTableAdapter();
+            
+            DataSet1.CompaniesDataTable dt = new DataSet1.CompaniesDataTable();
+            DataTableReader CheckMatch = dt.CreateDataReader();
+            companiesNameMatchAdapter.CheckName(dt, item.FullName);
+            int i = 0;
+            while (CheckMatch.Read())
+                
             {
+                i++;
+            }
+            if (i == 0)
+            {
+
+                
+                try
+                {
                     SqlCommand command = new SqlCommand("INSERT INTO [Companies] (CompanyName,ShortName,Manager1Name,Manager1Phone,Manager1Email,CompanyEmail,CompanyPhone,Address,URL,Country,City,AnketaUrl) VALUES (@CompanyName,@ShortName,@Manager1Name,@Manager1Phone,@Manager1Email,@CompanyEmail,@CompanyPhone,@Address,@URL,@Country,@City,@AnketaUrl)", localSqlConnection);
                     command.Parameters.AddWithValue("CompanyName", item.FullName);
-                        command.Parameters.AddWithValue("ShortName", item.ShortName);
+                    command.Parameters.AddWithValue("ShortName", item.ShortName);
                     command.Parameters.AddWithValue("Manager1Name", item.ManagerName);
                     command.Parameters.AddWithValue("Manager1Phone", item.ManagerPhone);
                     command.Parameters.AddWithValue("Manager1Email", item.ManagerEmail);
@@ -193,32 +194,28 @@ namespace WpfApp1
                     command.Parameters.AddWithValue("City", item.City);
                     command.Parameters.AddWithValue("AnketaUrl", item.AnketaUrl);
                     command.ExecuteNonQuery();
-                 //   command = new SqlCommand($"UPDATE Companies SET logo = (select * from OPENROWSET(BULK {item.Logo}, single_blob) as image) where CompanyName = {item.FullName}");
-                //    command.ExecuteNonQuery();
+                    //   command = new SqlCommand($"UPDATE Companies SET logo = (select * from OPENROWSET(BULK {item.Logo}, single_blob) as image) where CompanyName = {item.FullName}");
+                    //    command.ExecuteNonQuery();
                     // ParserFormItem item2 = new ParserFormItem();
                     // item2.SetItem(item.CompName, "OK");
                     // parserResult.parresBox.Items.Add(item2);
                 }
                 catch (Exception ex)
                 { }
-            //}
-            //else
-            //{
-            //    //ParserFormItem item2 = new ParserFormItem();
-            //    //item2.SetItem(item.CompName, "Exist");
-            //    //parserResult.parresBox.Items.Add(item2);
-            //    //MessageBox.Show("Запись уже существует", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Information);
-            //}
-
-            //mycheckreader.Close();
-            MySqlRefresh();
+            }
+            else
+            {
+              //  MessageBox.Show("Запись уже существует", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            CheckMatch.Close();
+            MyDataRefresh();
         }
 
         public void DelEntrie()
         {
 
 
-            SqlCommand command = new SqlCommand("DELETE FROM [Companies] WHERE name=@name", localSqlConnection);
+            SqlCommand command = new SqlCommand("DELETE FROM [Companies] WHERE CompanyName=@name", localSqlConnection);
             command.Parameters.AddWithValue("name", company.Text);
             command.ExecuteNonQuery();
             
@@ -229,7 +226,7 @@ namespace WpfApp1
             CompanyItem item = new CompanyItem();
             item.SetItem(company1.Text,"", managerName.Text,managerPhone.Text,managerEmail.Text, infoEmail1.Text, infoPhone1.Text, infoAddress1.Text, infoUrl1.Text, CompLogo,infoCity1.Text,infoCountry.Text,infoAnketa.Text);
             AddEntries(item);
-            MySqlRefresh();
+            MyDataRefresh();
             Button_Click_3(this, e);
             company1.Text = "";
             managerName.Text ="";
@@ -536,8 +533,8 @@ namespace WpfApp1
 
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            DataView dataView = companiesDT.DefaultView;
-            dataView.RowFilter = $"CompanyName LIKE '%{SearchBox.Text}%'";
+            
+            dataView.RowFilter = $"CompanyName LIKE '%{SearchBox.Text}%' AND CompanyName NOT LIKE ''";
         }
     }
 }

@@ -749,7 +749,6 @@
 
                 </StackPanel>
             </StackPanel>
-            <DataGrid x:Name="DGView" Grid.ColumnSpan="3" HorizontalAlignment="Left" Height="100" Margin="10,106,0,0" Grid.Row="3" VerticalAlignment="Top" Width="369"/>
         </Grid>
         <materialDesign:ColorZone
   Mode="PrimaryMid" VerticalAlignment="Top" Grid.Row="1" Grid.ColumnSpan="3" Height="66">
