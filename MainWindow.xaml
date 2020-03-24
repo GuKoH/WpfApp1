@@ -405,7 +405,7 @@
         <StackPanel Orientation="Horizontal" Height="40" VerticalAlignment="Center" Margin="0,3,0,5" Grid.Row="3">
             <Button
   Style="{StaticResource MaterialDesignFloatingActionLightButton}" materialDesign:ShadowAssist.ShadowDepth="Depth5"
-  ToolTip="MaterialDesignFloatingActionLightButton" Margin="10,0,0,0" Width="40" Height="40" Click="Button_Click_2">
+  ToolTip="Добавить" Margin="10,0,0,0" Width="40" Height="40" Click="AddCompany_Click">
                 <materialDesign:PackIcon
     Kind="Add"
     Height="24"
@@ -413,7 +413,7 @@
             </Button>
             <Button
   Style="{StaticResource MaterialDesignFloatingActionLightButton}" materialDesign:ShadowAssist.ShadowDepth="Depth5"
-  ToolTip="MaterialDesignFloatingActionLightButton" Margin="20,0,0,0" Width="40" Height="40" Click="Button_Click">
+  ToolTip="Удалить" Margin="20,0,0,0" Width="40" Height="40" Click="Button_Click">
                 <materialDesign:PackIcon
     Kind="Delete"
     Height="24"
@@ -421,14 +421,14 @@
             </Button>
         </StackPanel>
 
-        <Grid x:Name="Почта" Margin="0,5,0,0" Grid.Row="2" Background="#FF181818" DataContext="{Binding SelectedItem, ElementName=MailBox}" Grid.Column="1" Grid.RowSpan="3" d:IsHidden="True" Grid.ColumnSpan="2">
+        <Grid x:Name="Почта" Margin="0,5,0,0" Grid.Row="2" Background="#FF181818" DataContext="{Binding SelectedItem, ElementName=MailBox}" Grid.Column="1" Grid.RowSpan="3" Grid.ColumnSpan="2" d:IsHidden="True">
             <Grid.RowDefinitions>
                 <RowDefinition Height="38*"/>
                 <RowDefinition Height="345*"/>
             </Grid.RowDefinitions>
             <DockPanel DataContext="{Binding SelectedItem, ElementName=myListBox}" HorizontalAlignment="Left" Height="36" LastChildFill="False" VerticalAlignment="Top" Width="492">
                 <Label Content="Фильтр" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FF92B9E0" FontWeight="Bold" FontFamily="Century Gothic" FontSize="24"/>
-                <TextBox x:Name="textFrom" HorizontalAlignment="Left" Height="42" TextWrapping="Wrap" Text="{Binding CompEmail, Mode=OneWay}" VerticalAlignment="Center" Width="373.5" Margin="11,0,0,-6" Background="{x:Null}" Foreground="#FF92B3CC" BorderBrush="{x:Null}" FontFamily="Century Gothic" FontSize="24" Focusable="False"/>
+                <TextBox x:Name="textFrom" HorizontalAlignment="Left" Height="42" TextWrapping="Wrap" Text="{Binding CompanyEmail, Mode=OneWay}" VerticalAlignment="Center" Width="373.5" Margin="11,0,0,-6" Background="{x:Null}" Foreground="#FF92B3CC" BorderBrush="{x:Null}" FontFamily="Century Gothic" FontSize="24" Focusable="False" TextChanged="textFrom_TextChanged"/>
             </DockPanel>
             <ListBox x:Name="MailBox" Margin="10,10,0,10" Grid.Row="1" ItemTemplate="{DynamicResource MailBoxTempl}" HorizontalAlignment="Left" Width="472" Background="{x:Null}" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderBrush="{x:Null}"/>
             <Grid DataContext="{Binding SelectedItem, ElementName=MailBox}" HorizontalAlignment="Left" Height="325" Margin="525,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="482">
@@ -443,28 +443,31 @@
                 </RichTextBox>
             </Grid>
         </Grid>
-        <Grid x:Name="Отправить" Margin="0,5,0,0" Grid.Row="2" Background="#FF181818" Grid.Column="1" Grid.RowSpan="3" d:IsHidden="True" Grid.ColumnSpan="2">
+        <Grid x:Name="Отправить" Margin="0,5,0,0" Grid.Row="2" Background="#FF181818" Grid.Column="1" Grid.RowSpan="3" Grid.ColumnSpan="2" d:IsHidden="True">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="191*"/>
+                <RowDefinition Height="46*"/>
+                <RowDefinition Height="32*"/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="118*"/>
-                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="15*"/>
+                <ColumnDefinition Width="500"/>
+                <ColumnDefinition Width="418*"/>
+                <ColumnDefinition Width="40"/>
             </Grid.ColumnDefinitions>
-            <DockPanel DataContext="{Binding SelectedItem, ElementName=myListBox}" HorizontalAlignment="Left" Height="35.96" LastChildFill="False" VerticalAlignment="Top" Width="492" Grid.ColumnSpan="2">
+            <StackPanel Orientation="Horizontal" DataContext="{Binding SelectedItem, ElementName=myListBox}" Margin="0" Grid.Column="1">
                 <Label Content="Кому" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FF92B9E0" FontWeight="Bold" FontFamily="Century Gothic" FontSize="24"/>
-                <TextBox x:Name="textTo" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding CompEmail, Mode=OneTime}" VerticalAlignment="Center" Width="387" Margin="11,6.48,0,6.48"/>
-            </DockPanel>
-            <DockPanel DataContext="{Binding SelectedItem, ElementName=myListBox}" HorizontalAlignment="Left" Height="35.96" LastChildFill="False" VerticalAlignment="Top" Width="492" Grid.ColumnSpan="2" Margin="0,40.96,0,0">
+                <TextBox x:Name="textTo" TextWrapping="Wrap" Text="{Binding CompanyEmail, Mode=OneTime}" Margin="11,0,0,0" Width="400"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" DataContext="{Binding SelectedItem, ElementName=myListBox}" Margin="0" Grid.Column="1" Grid.Row="1">
                 <Label Content="Тема" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FF92B9E0" FontWeight="Bold" FontFamily="Century Gothic" FontSize="24" Margin="4,0,0,0"/>
-                <TextBox x:Name="textSubject" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Center" Width="387" Margin="11,6.48,0,6.48" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-            </DockPanel>
-            <Grid HorizontalAlignment="Left" Height="342.04" Margin="10,40.96,0,0" VerticalAlignment="Top" Width="472" Grid.ColumnSpan="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="39*"/>
-                    <RowDefinition Height="254*"/>
-                    <RowDefinition Height="49*"/>
-                </Grid.RowDefinitions>
-                <Button Content="Отправить" HorizontalAlignment="Left" Margin="387,10,0,0" Grid.Row="2" VerticalAlignment="Top" Width="75" HorizontalContentAlignment="Center" Click="Button_Click_5"/>
-            </Grid>
-            <TextBox x:Name="textBody" HorizontalAlignment="Left" Height="244" Margin="10,82,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="452"/>
+                <TextBox x:Name="textSubject" TextWrapping="Wrap" Margin="11,0,0,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Width="400"/>
+
+            </StackPanel>
+            <TextBox x:Name="textBody" TextWrapping="Wrap" Margin="0" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2"/>
+            <Button Content="Отправить" HorizontalAlignment="Center" VerticalAlignment="Center" Width="114" HorizontalContentAlignment="Center" Click="SendMail_Click" Margin="0" Grid.Row="3" Grid.Column="1"/>
         </Grid>
 
         <Grid x:Name="Добавить" DataContext="{Binding SelectedItem, ElementName=myListBox}" Margin="0,5,0,0" Grid.Row="2" Grid.Column="1" Grid.RowSpan="3" Grid.ColumnSpan="2" d:IsHidden="True">
@@ -536,9 +539,9 @@
                     </Button>
                 </StackPanel>
             </StackPanel>
-            <Button  Content="Добавить" HorizontalAlignment="Center" Margin="25,3,25,2" Grid.Row="2" VerticalAlignment="Center" Width="124" Click="Button_Click_1" Height="26" Grid.Column="2"/>
+            <Button  Content="Добавить" HorizontalAlignment="Center" Margin="25,3,25,2" Grid.Row="2" VerticalAlignment="Center" Width="124" Click="AddEntrie_Click" Height="26" Grid.Column="2"/>
         </Grid>
-        <Grid x:Name="Парсер" Margin="3,0,2,0" Grid.Row="2" Grid.RowSpan="2" Grid.Column="2" d:IsHidden="True">
+        <Grid x:Name="Парсер" Margin="3,0,2,0" Grid.Row="2" Grid.RowSpan="2" Grid.Column="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="16*"/>
 
@@ -548,18 +551,18 @@
                 <ColumnDefinition Width="16*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="19*"/>
+                <RowDefinition Height="17*"/>
 
 
 
 
-                <RowDefinition Height="100*"/>
-                <RowDefinition Height="55*"/>
-                <RowDefinition Height="125*"/>
-                <RowDefinition Height="54*"/>
+                <RowDefinition Height="110"/>
+                <RowDefinition Height="34*"/>
+                <RowDefinition Height="114*"/>
+                <RowDefinition Height="50*"/>
             </Grid.RowDefinitions>
             <ListBox x:Name="ParserBox" materialDesign:ShadowAssist.ShadowDepth="Depth3" Style="{DynamicResource MaterialDesignListBox}" Grid.Row="1" Grid.Column="3" Grid.RowSpan="4" Margin="0,0,0,11" />
-            <materialDesign:Card  materialDesign:ShadowAssist.ShadowDepth="Depth3" materialDesign:ShadowAssist.ShadowEdges="All" Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Margin="9,0,11,0" VerticalAlignment="Center" >
+            <materialDesign:Card  materialDesign:ShadowAssist.ShadowDepth="Depth3" materialDesign:ShadowAssist.ShadowEdges="All" Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Margin="9,0,11,0" VerticalAlignment="Top" Height="142" >
                 <StackPanel x:Name="ParseFound" Orientation="Vertical" VerticalAlignment="Top" Grid.RowSpan="3" Height="154" Grid.ColumnSpan="2" Margin="10,4,0,-15" Grid.Row="1" Grid.Column="1">
                     <StackPanel Orientation="Horizontal" Height="24">
                         <materialDesign:PackIcon Kind="Company" VerticalAlignment="Center" Width="20" Height="20"/>
@@ -592,7 +595,7 @@
                     </StackPanel>
                 </StackPanel>
             </materialDesign:Card>
-            <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" Margin="7,5,12,0">
+            <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" Margin="7,5,12,0" VerticalAlignment="Top" Height="95">
                 <StackPanel Orientation="Horizontal" Height="45">
                     <materialDesign:PackIcon Kind="PlayArrow" VerticalAlignment="Center" />
                     <ComboBox x:Name="StartPage"
@@ -624,7 +627,7 @@
                     </ComboBox>
                 </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Vertical" Grid.ColumnSpan="2" Margin="0,0,10,0" Grid.RowSpan="3" Grid.Row="2">
+            <StackPanel Orientation="Vertical" Margin="0,0,10,0" Grid.RowSpan="3" Grid.Row="2" Grid.Column="1">
                 <TextBox x:Name="txWeb"
     Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
     VerticalAlignment="Top"
@@ -642,28 +645,24 @@
     VerticalScrollBarVisibility="Auto"
     materialDesign:HintAssist.Hint="Введи часть ссылки до номера страницы..." />
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="21,40,5,7" Width="250">
+            <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="18,45,3,10" Width="250" Height="58">
                 <TextBlock
       Margin="0,0,8,0"
       VerticalAlignment="Center"><Run Text="Начать сканирование:"/></TextBlock>
-                <Button
+                <Button x:Name="ParseBt"
       Style="{StaticResource MaterialDesignFloatingActionLightButton}"
       Margin="8 0 0 0"
       Command="{Binding SaveCommand}"
       materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsSaving}"
-      materialDesign:ButtonProgressAssist.Value="{Binding SaveProgress}" Grid.Row="4" Grid.Column="2" Click="Button_Click_6">
+      materialDesign:ButtonProgressAssist.Value="{Binding SaveProgress}" Grid.Row="4" Grid.Column="2" Click="Button_Click_6" Height="Auto" Width="{Binding ActualHeight, ElementName=ParseBt, Mode=OneWay}">
                     <!-- simple example of toggling/animating pack icon with a data trigger-->
-                    <materialDesign:PackIcon
-        Height="24"
-        Width="24" Kind="Search">
-
-                    </materialDesign:PackIcon>
+                    <materialDesign:PackIcon x:Name="packIcon" Kind="Search" Width="40" Height="40"/>
                 </Button>
             </StackPanel>
-            <ProgressBar x:Name="Progress" Style="{DynamicResource MaterialDesignLinearProgressBar}" Grid.Column="2" Grid.Row="5" Width="266"/>
+            <ProgressBar x:Name="Progress" Style="{DynamicResource MaterialDesignLinearProgressBar}" Grid.Column="2" Grid.Row="4" Height="Auto" Margin="2,23,3,23"/>
         </Grid>
 
-        <Grid x:Name="Инфо" Background="{DynamicResource MaterialDesignCardBackground}" DataContext="{Binding SelectedItem, ElementName=myListBox}" Margin="2,0,0,0" Grid.Row="2" Grid.Column="1" Grid.RowSpan="3" Grid.ColumnSpan="2">
+        <Grid x:Name="Инфо" Background="{DynamicResource MaterialDesignCardBackground}" DataContext="{Binding SelectedItem, ElementName=myListBox}" Margin="2,0,0,0" Grid.Row="2" Grid.Column="1" Grid.RowSpan="3" Grid.ColumnSpan="2" d:IsHidden="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="38*"/>
                 <ColumnDefinition Width="105*"/>
@@ -676,37 +675,36 @@
 
 
 
-                <RowDefinition Height="17*"/>
-                <RowDefinition Height="8*"/>
-                <RowDefinition Height="86*"/>
+                <RowDefinition Height="31*"/>
+                <RowDefinition Height="80*"/>
             </Grid.RowDefinitions>
-            <StackPanel Orientation="Horizontal" Grid.ColumnSpan="4" Margin="0" Grid.Row="1" VerticalAlignment="Top" Height="51">
-                <materialDesign:PackIcon Kind="Company" Margin="45,0,0,0" Width="50" Height="50" VerticalAlignment="Center"  />
-                <TextBlock x:Name="company" Style="{DynamicResource MaterialDesignCaptionTextBlock}" TextWrapping="Wrap" FontWeight="Bold" FontSize="36" Text="{Binding FullName}" Width="573" Margin="13,0,0,0" VerticalAlignment="Center" Height="60"/>
+            <StackPanel Orientation="Horizontal" Grid.ColumnSpan="4" Margin="0" Grid.Row="1">
+                <Image Source="{Binding logo}" Stretch="Fill" Margin="20,0,0,0" Width="120" Height="90" VerticalAlignment="Top" HorizontalAlignment="Left" />
+                <StackPanel Orientation="Vertical">
+                    <TextBlock x:Name="company" Style="{DynamicResource MaterialDesignCaptionTextBlock}" TextWrapping="Wrap" FontWeight="Bold" FontSize="36" Text="{Binding CompanyName}" Margin="13,0,0,0" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="shortName" Style="{DynamicResource MaterialDesignCaptionTextBlock}" TextWrapping="Wrap" FontWeight="Bold" FontSize="16" Text="{Binding ShortName}" Width="573" Margin="13,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" Height="34"/>
+
+                </StackPanel>
 
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.ColumnSpan="3" Margin="0,49,0,250" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Height="34" Grid.RowSpan="3">
-                <TextBlock x:Name="shortName" Style="{DynamicResource MaterialDesignCaptionTextBlock}" TextWrapping="Wrap" FontWeight="Bold" FontSize="16" Text="{Binding ShortName}" Width="573" Margin="13,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" Height="34"/>
-
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3">
+            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3">
                 <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" Height="178" Grid.ColumnSpan="2">
                     <StackPanel Orientation="Horizontal" Height="30">
                         <materialDesign:PackIcon Kind="Email" VerticalAlignment="Center" Width="20" Height="20"/>
                         <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="18" Width="82" Margin="7,5,0,0"><Run Text="Email:"/></TextBlock>
 
-                        <TextBlock x:Name="infoEmail" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="337" Margin="2,0,0,0"><Run Text="{Binding Email, Mode=OneWay}"/></TextBlock>
+                        <TextBlock x:Name="infoEmail" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="337" Margin="2,0,0,0"><Run Text="{Binding CompanyEmail, Mode=OneWay}"/></TextBlock>
 
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Height="30">
                         <materialDesign:PackIcon Kind="Phone" Width="20" Height="20" VerticalAlignment="Center" />
                         <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="82" Margin="7,0,0,0"><Run Text="Телефон"/><Run Text=":"/></TextBlock>
-                        <TextBlock x:Name="infoPhone" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="337"><Run Text="{Binding Phone, Mode=OneWay}"/></TextBlock>
+                        <TextBlock x:Name="infoPhone" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="337"><Run Text="{Binding CompanyPhone, Mode=OneWay}"/></TextBlock>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Height="30">
                         <materialDesign:PackIcon Kind="Web" Width="20" Height="20" VerticalAlignment="Center"/>
                         <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="82" Text="WWW:" Margin="7,0,0,0"/>
-                        <TextBlock x:Name="infoUrl" HorizontalAlignment="Left" Margin="0" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="337"><Run Text="{Binding CompanyWeb, Mode=OneWay}"/></TextBlock>
+                        <TextBlock x:Name="infoUrl" HorizontalAlignment="Left" Margin="0" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="337"><Run Text="{Binding URL, Mode=OneWay}"/></TextBlock>
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Orientation="Vertical">
@@ -731,19 +729,19 @@
                     <StackPanel Orientation="Horizontal" Height="30">
                         <materialDesign:PackIcon Kind="Face" Width="20" Height="20" VerticalAlignment="Center"/>
                         <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="82" Margin="7,0,0,0"><Run Text="Manager:"/></TextBlock>
-                        <TextBlock x:Name="infoManager" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="337"><Run Text="{Binding ManagerName, Mode=OneWay}"/></TextBlock>
+                        <TextBlock x:Name="infoManager" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="337"><Run Text="{Binding Manager1Name, Mode=OneWay}"/></TextBlock>
 
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Height="30">
                         <materialDesign:PackIcon Kind="Phone" Width="20" Height="20" VerticalAlignment="Center"/>
                         <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="82" Margin="7,0,0,0" Text="Телефон:Ж"/>
-                        <TextBlock x:Name="infoManager1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="337"><Run Text="{Binding ManagerPhone, Mode=OneWay}"/></TextBlock>
+                        <TextBlock x:Name="infoManager1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="337"><Run Text="{Binding Manager1Phone, Mode=OneWay}"/></TextBlock>
 
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Height="30">
                         <materialDesign:PackIcon Kind="Email" Width="20" Height="20" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
                         <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="82" Margin="7,0,0,0" Text="Email:"/>
-                        <TextBlock x:Name="infoManager2" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="337"><Run Text="{Binding ManagerEmail, Mode=OneWay}"/></TextBlock>
+                        <TextBlock x:Name="infoManager2" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="337"><Run Text="{Binding Manager1Email, Mode=OneWay}"/></TextBlock>
 
                     </StackPanel>
 
@@ -798,14 +796,14 @@
                 <RadioButton x:Name="Инфо1"
                     Style="{StaticResource MaterialDesignTabRadioButton}"
                     Margin="4,0"
-                    IsChecked="True" Height="Auto" Width="106" Checked="Button_Click_3"
+                    IsChecked="True" Height="Auto" Width="106" Checked="Info_Click"
        >
                     <materialDesign:PackIcon Kind="InfoCircle" Height="49" Width="66"/>
                 </RadioButton>
                 <RadioButton x:Name="Отправить1"
                     Style="{StaticResource MaterialDesignTabRadioButton}"
                     Margin="4,0"
-                    IsChecked="False" Height="Auto" Width="106" Checked="Button_Click_4"
+                    IsChecked="False" Height="Auto" Width="106" Checked="Send_Click"
        >
                     <materialDesign:PackIcon Kind="EmailSend" Height="49" Width="66"/>
                 </RadioButton>
@@ -833,7 +831,10 @@
                 <materialDesign:PackIcon x:Name="LocalSqlStatus" Kind="CheckboxBlankCircle" Width="20" Height="20" VerticalAlignment="Center" Margin="50,0,0,0"/>
                 <TextBlock Text="Local DB" FontSize="16" Width="66" VerticalAlignment="Center" Margin="0,6"/>
                 <TextBlock x:Name="lcCount" FontSize="16" Width="75" VerticalAlignment="Center" Margin="15,6,0,6"/>
-
+                <TextBlock x:Name="SyncStatus" FontSize="16" VerticalAlignment="Center" Margin="15,0,0,0"/>
+                <Button x:Name="SyncDB" Click="SyncDB_Click" Margin="15,3,0,3" Height="Auto" Visibility="Hidden" >
+                    <materialDesign:PackIcon Kind="Sync"  VerticalAlignment="Center" HorizontalAlignment="Center" Width="Auto" Height="Auto" />
+                </Button>
             </StackPanel>
         </materialDesign:ColorZone>
     </Grid>

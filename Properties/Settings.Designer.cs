@@ -26,11 +26,21 @@ namespace WpfApp1.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=MyLocalDB;Integrated Security=" +
-            "True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False")]
-        public string MyLocalDBConnectionString {
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=marinedb.ddns.net;Initial Catalog=MyTestDatabase;User ID=myUser;Passw" +
+            "ord=111222;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False")]
+        public string MyTestDatabaseConnectionString {
             get {
-                return ((string)(this["MyLocalDBConnectionString"]));
+                return ((string)(this["MyTestDatabaseConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\Companies.sqlite3")]
+        public string SqliteConnectionString {
+            get {
+                return ((string)(this["SqliteConnectionString"]));
             }
         }
     }
