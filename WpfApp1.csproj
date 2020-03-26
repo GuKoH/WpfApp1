@@ -187,10 +187,47 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="bin\Debug\AngleSharp.dll" />
+    <None Include="bin\Debug\AngleSharp.xml" />
+    <None Include="bin\Debug\CrewingCompanies1.1.01.pdb" />
+    <None Include="bin\Debug\EntityFramework.dll" />
+    <None Include="bin\Debug\EntityFramework.SqlServer.dll" />
+    <None Include="bin\Debug\EntityFramework.SqlServer.xml" />
+    <None Include="bin\Debug\EntityFramework.xml" />
+    <None Include="bin\Debug\MaterialDesignColors.dll" />
+    <None Include="bin\Debug\MaterialDesignColors.pdb" />
+    <None Include="bin\Debug\MaterialDesignThemes.Wpf.dll" />
+    <None Include="bin\Debug\MaterialDesignThemes.Wpf.pdb" />
+    <None Include="bin\Debug\MaterialDesignThemes.Wpf.xml" />
+    <None Include="bin\Debug\Microsoft.Data.Sqlite.dll" />
+    <None Include="bin\Debug\Microsoft.Data.Sqlite.xml" />
+    <None Include="bin\Debug\SQLitePCLRaw.batteries_v2.dll" />
+    <None Include="bin\Debug\SQLitePCLRaw.core.dll" />
+    <None Include="bin\Debug\SQLitePCLRaw.nativelibrary.dll" />
+    <None Include="bin\Debug\SQLitePCLRaw.provider.dynamic_cdecl.dll" />
+    <None Include="bin\Debug\System.Buffers.dll" />
+    <None Include="bin\Debug\System.Buffers.xml" />
+    <None Include="bin\Debug\System.Data.SQLite.dll" />
+    <None Include="bin\Debug\System.Data.SQLite.EF6.dll" />
+    <None Include="bin\Debug\System.Data.SQLite.Linq.dll" />
+    <None Include="bin\Debug\System.Data.SQLite.xml" />
+    <None Include="bin\Debug\System.Memory.dll" />
+    <None Include="bin\Debug\System.Memory.xml" />
+    <None Include="bin\Debug\System.Numerics.Vectors.dll" />
+    <None Include="bin\Debug\System.Numerics.Vectors.xml" />
+    <None Include="bin\Debug\System.Runtime.CompilerServices.Unsafe.dll" />
+    <None Include="bin\Debug\System.Runtime.CompilerServices.Unsafe.xml" />
+    <None Include="bin\Debug\System.Text.Encoding.CodePages.dll" />
+    <None Include="bin\Debug\WhatsAppApi.dll" />
     <Content Include="Companies.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="bin\Debug\Companies.db" />
+    <None Include="bin\Debug\Companies.sqlite3" />
+    <None Include="bin\Debug\CrewingCompanies1.1.01.exe.config" />
+    <None Include="bin\Debug\System.Data.SQLite.dll.config" />
     <None Include="GlobDataSet.xsc">
       <DependentUpon>GlobDataSet.xsd</DependentUpon>
     </None>

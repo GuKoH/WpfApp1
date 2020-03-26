@@ -362,7 +362,7 @@
                         <TextBlock x:Name="CompTel" Text="{Binding CompanyPhone}" HorizontalAlignment="Stretch" Margin="14.792,15.147,46.253,7.052" TextWrapping="Wrap" VerticalAlignment="Stretch" Width="Auto" FontSize="10" Foreground="#FF34899C" Grid.ColumnSpan="1" Height="Auto" Grid.Row="1"/>
 
                         <TextBlock x:Name="CompEmail" Text="{Binding CompanyEmail}" HorizontalAlignment="Stretch" Margin="14.792,0,46.253,20.032" TextWrapping="Wrap" VerticalAlignment="Stretch" Grid.ColumnSpan="1" Width="Auto" FontSize="10" Foreground="#FF34899C" Height="Auto" Grid.Row="1"/>
-                        <TextBlock x:Name="Mark" Grid.Column="1" HorizontalAlignment="Stretch" Margin="22.176,13.467,23.135,14.609" TextWrapping="Wrap" VerticalAlignment="Stretch" FontFamily="Stencil" FontWeight="Bold" Foreground="#FF70E886" Height="Auto" Width="Auto" FontSize="36" TextAlignment="Center" Grid.RowSpan="2"/>
+                        <TextBlock x:Name="Mark" Grid.Column="1" HorizontalAlignment="Stretch" Margin="22.176,13.467,23.135,14.609" TextWrapping="Wrap" VerticalAlignment="Stretch" FontFamily="Stencil" FontWeight="Bold" Foreground="#FF70E886" Height="Auto" Width="Auto" FontSize="36" TextAlignment="Center" Grid.RowSpan="2" Text="{Binding Mark}"/>
                         <Rectangle x:Name="rectangle" Fill="#FF414146" HorizontalAlignment="Stretch" Height="65.333" VerticalAlignment="Top" Width="Auto" Stroke="{x:Null}" Margin="1.541,0,0,0" Grid.RowSpan="2" RenderTransformOrigin="0.5,0.5">
                             <Rectangle.RenderTransform>
                                 <TransformGroup>
@@ -413,7 +413,7 @@
             </Button>
             <Button
   Style="{StaticResource MaterialDesignFloatingActionLightButton}" materialDesign:ShadowAssist.ShadowDepth="Depth5"
-  ToolTip="Удалить" Margin="20,0,0,0" Width="40" Height="40" Click="Button_Click">
+  ToolTip="Удалить" Margin="20,0,0,0" Width="40" Height="40" Click="DelEntrie_Click">
                 <materialDesign:PackIcon
     Kind="Delete"
     Height="24"
@@ -541,7 +541,7 @@
             </StackPanel>
             <Button  Content="Добавить" HorizontalAlignment="Center" Margin="25,3,25,2" Grid.Row="2" VerticalAlignment="Center" Width="124" Click="AddEntrie_Click" Height="26" Grid.Column="2"/>
         </Grid>
-        <Grid x:Name="Парсер" Margin="3,0,2,0" Grid.Row="2" Grid.RowSpan="2" Grid.Column="2">
+        <Grid x:Name="Парсер" Margin="3,0,2,0" Grid.Row="2" Grid.RowSpan="2" Grid.Column="2" d:IsHidden="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="16*"/>
 
@@ -659,15 +659,15 @@
                     <materialDesign:PackIcon x:Name="packIcon" Kind="Search" Width="40" Height="40"/>
                 </Button>
             </StackPanel>
-            <ProgressBar x:Name="Progress" Style="{DynamicResource MaterialDesignLinearProgressBar}" Grid.Column="2" Grid.Row="4" Height="Auto" Margin="2,23,3,23"/>
+            <ProgressBar x:Name="Progress" Style="{DynamicResource MaterialDesignLinearProgressBar}" Grid.Column="2" Grid.Row="4" Height="Auto" Margin="0,0,3,0" VerticalAlignment="Center"/>
         </Grid>
 
-        <Grid x:Name="Инфо" Background="{DynamicResource MaterialDesignCardBackground}" DataContext="{Binding SelectedItem, ElementName=myListBox}" Margin="2,0,0,0" Grid.Row="2" Grid.Column="1" Grid.RowSpan="3" Grid.ColumnSpan="2" d:IsHidden="True">
+        <Grid x:Name="Инфо" Background="{DynamicResource MaterialDesignCardBackground}" DataContext="{Binding SelectedItem, ElementName=myListBox}" Margin="2,0,0,30" Grid.Row="2" Grid.Column="1" Grid.RowSpan="3" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="38*"/>
                 <ColumnDefinition Width="105*"/>
-                <ColumnDefinition Width="361*"/>
-                <ColumnDefinition Width="425*"/>
+                <ColumnDefinition Width="315*"/>
+                <ColumnDefinition Width="471*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="20"/>
@@ -675,81 +675,136 @@
 
 
 
-                <RowDefinition Height="31*"/>
-                <RowDefinition Height="80*"/>
+                <RowDefinition Height="59*"/>
+                <RowDefinition Height="274*"/>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Grid.ColumnSpan="4" Margin="0" Grid.Row="1">
-                <Image Source="{Binding logo}" Stretch="Fill" Margin="20,0,0,0" Width="120" Height="90" VerticalAlignment="Top" HorizontalAlignment="Left" />
+                <Image Source="{Binding logo}" Stretch="Fill" Margin="20,0,0,0" Width="92" Height="59" VerticalAlignment="Top" HorizontalAlignment="Left" />
                 <StackPanel Orientation="Vertical">
-                    <TextBlock x:Name="company" Style="{DynamicResource MaterialDesignCaptionTextBlock}" TextWrapping="Wrap" FontWeight="Bold" FontSize="36" Text="{Binding CompanyName}" Margin="13,0,0,0" VerticalAlignment="Center"/>
-                    <TextBlock x:Name="shortName" Style="{DynamicResource MaterialDesignCaptionTextBlock}" TextWrapping="Wrap" FontWeight="Bold" FontSize="16" Text="{Binding ShortName}" Width="573" Margin="13,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" Height="34"/>
+                    <TextBlock x:Name="company" Style="{DynamicResource MaterialDesignCaptionTextBlock}" TextWrapping="Wrap" FontWeight="Bold" FontSize="20" Text="{Binding CompanyName}" Margin="13,0,0,0" VerticalAlignment="Center" DataContextChanged="company_DataContextChanged"/>
+                    <TextBlock x:Name="shortName" Style="{DynamicResource MaterialDesignCaptionTextBlock}" TextWrapping="Wrap" FontWeight="Bold" Text="{Binding ShortName}" Width="573" Margin="13,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
                 </StackPanel>
 
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3">
-                <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" Height="178" Grid.ColumnSpan="2">
-                    <StackPanel Orientation="Horizontal" Height="30">
-                        <materialDesign:PackIcon Kind="Email" VerticalAlignment="Center" Width="20" Height="20"/>
-                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="18" Width="82" Margin="7,5,0,0"><Run Text="Email:"/></TextBlock>
+            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Margin="0">
+                <StackPanel x:Name="InfoPart" Orientation="Vertical" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Margin="0,0,15,0">
+                    <Grid Panel.ZIndex="1" Height="{Binding ActualHeight, ElementName=InfoPart, Mode=OneWay}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="55"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="55"/>
+                            <RowDefinition Height="75"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <materialDesign:PackIcon Kind="Email" VerticalAlignment="Center" Width="17" Height="17"/>
+                                <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="14" Width="82" Margin="7,0,0,0" VerticalAlignment="Center"><Run Text="Email:"/></TextBlock>
 
-                        <TextBlock x:Name="infoEmail" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="337" Margin="2,0,0,0"><Run Text="{Binding CompanyEmail, Mode=OneWay}"/></TextBlock>
+                                <TextBlock x:Name="infoEmail" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Width="337" Margin="2,0,0,0"><Run Text="{Binding CompanyEmail, Mode=OneWay}"/></TextBlock>
 
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Height="30">
-                        <materialDesign:PackIcon Kind="Phone" Width="20" Height="20" VerticalAlignment="Center" />
-                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="82" Margin="7,0,0,0"><Run Text="Телефон"/><Run Text=":"/></TextBlock>
-                        <TextBlock x:Name="infoPhone" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="337"><Run Text="{Binding CompanyPhone, Mode=OneWay}"/></TextBlock>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Height="30">
-                        <materialDesign:PackIcon Kind="Web" Width="20" Height="20" VerticalAlignment="Center"/>
-                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="82" Text="WWW:" Margin="7,0,0,0"/>
-                        <TextBlock x:Name="infoUrl" HorizontalAlignment="Left" Margin="0" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="337"><Run Text="{Binding URL, Mode=OneWay}"/></TextBlock>
-                    </StackPanel>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <materialDesign:PackIcon Kind="Phone" Width="17" Height="17" VerticalAlignment="Center" />
+                                <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Width="82" Margin="7,0,0,0"><Run Text="Телефон"/><Run Text=":"/></TextBlock>
+                                <TextBlock x:Name="infoPhone" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Width="337"><Run Text="{Binding CompanyPhone, Mode=OneWay}"/></TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <materialDesign:PackIcon Kind="Web" Width="17" Height="17" VerticalAlignment="Center"/>
+                                <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Width="82" Text="WWW:" Margin="7,0,0,0"/>
+                                <TextBlock x:Name="infoUrl" HorizontalAlignment="Left" Margin="0" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Width="337"><Run Text="{Binding URL, Mode=OneWay}"/></TextBlock>
+
+                            </StackPanel>
+                        </StackPanel>
+                        <ScrollViewer Grid.Row="1">
+                            <ListBox x:Name="CommentBox" ItemTemplate="{DynamicResource CommentTemplate}" Style="{DynamicResource MaterialDesignCardsListBox}" Margin="0">
+                                <ListBox.Resources>
+                                    <DataTemplate x:Key="CommentTemplate">
+                                        <materialDesign:ColorZone Mode="Dark" CornerRadius="0" Panel.ZIndex="1" Padding="5,5,5,5" materialDesign:ShadowAssist.ShadowDepth="Depth3" materialDesign:ShadowAssist.Darken="True">
+                                            <Grid Width="380" Height="65">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="147*"/>
+                                                    <ColumnDefinition Width="68*"/>
+                                                    <ColumnDefinition Width="165*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="25"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <TextBlock  Text="{Binding CommentText}" HorizontalAlignment="Stretch" Height="Auto" Margin="0" TextWrapping="Wrap"  VerticalAlignment="Stretch" Width="Auto" Grid.Row="1" Grid.ColumnSpan="3" FontSize="14"/>
+                                                <TextBlock  Text="{Binding Author}" Grid.ColumnSpan="1" HorizontalAlignment="Stretch" Height="Auto" Margin="0" TextWrapping="Wrap"  VerticalAlignment="Stretch" Width="Auto" FontFamily="Candara" FontSize="14"/>
+                                                <TextBlock  Text="{Binding Time}" Grid.Column="2" HorizontalAlignment="Stretch" Height="Auto" Margin="0" TextWrapping="Wrap"  VerticalAlignment="Stretch" Width="Auto" FontSize="14"/>
+
+                                            </Grid>
+                                        </materialDesign:ColorZone>
+                                    </DataTemplate>
+                                </ListBox.Resources>
+                            </ListBox>
+                        </ScrollViewer>
+                        <TextBox x:Name="AuthorTX" Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
+    VerticalAlignment="Top"
+    AcceptsReturn="True"
+    TextWrapping="Wrap"
+    MaxWidth="300"
+    materialDesign:HintAssist.Hint="Ваш псевдоним..." Height="64.314" VerticalContentAlignment="Bottom" Width="300" HorizontalAlignment="Left" Margin="0" Grid.Row="2" Grid.RowSpan="2"/>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0" Grid.Row="3" Height="65.625">
+                            <TextBox x:Name="CommentTX"  Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+    Margin="0"
+    VerticalAlignment="Top"
+    AcceptsReturn="True"
+    TextWrapping="Wrap"
+    VerticalScrollBarVisibility="Auto"
+    materialDesign:HintAssist.Hint="Ваш комментарий..." Width="310"/>
+                            <Button x:Name="Addcomment" Content="Отправить" Margin="10,0,0,0" Click="AddComment_Click"/>
+                        </StackPanel>
+                    </Grid>
                 </StackPanel>
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal" Margin="0" VerticalAlignment="Center">
-                        <materialDesign:PackIcon Kind="Web" Width="20" Height="20" VerticalAlignment="Center"/>
-                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="82" Text="Страна:" Margin="7,0,0,0"/>
-                        <TextBlock x:Name="infoCity2" HorizontalAlignment="Left" Margin="0" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="25" Width="337"><Run Text="{Binding Country, Mode=OneWay}"/></TextBlock>
+                        <materialDesign:PackIcon Kind="Web" Width="17" Height="17" VerticalAlignment="Center"/>
+                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Width="65" Text="Страна:" Margin="7,0,0,0"/>
+                        <TextBlock x:Name="infoCity2" HorizontalAlignment="Left" Margin="0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Width="337"><Run Text="{Binding Country, Mode=OneWay}"/></TextBlock>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="0" VerticalAlignment="Center">
-                        <materialDesign:PackIcon Kind="City" Width="20" Height="20" VerticalAlignment="Center"/>
-                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="82" Text="Город" Margin="7,0,0,0"/>
-                        <TextBlock x:Name="infoCity3" HorizontalAlignment="Left" Margin="0" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="25" Width="337"><Run Text="{Binding City, Mode=OneWay}"/></TextBlock>
+                        <materialDesign:PackIcon Kind="City" Width="17" Height="17" VerticalAlignment="Center"/>
+                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Width="65" Text="Город" Margin="7,0,0,0"/>
+                        <TextBlock x:Name="infoCity3" HorizontalAlignment="Left" Margin="0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Width="337"><Run Text="{Binding City, Mode=OneWay}"/></TextBlock>
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Margin="0" VerticalAlignment="Top">
-                        <materialDesign:PackIcon Kind="AddressMarker" Width="20" Height="20" VerticalAlignment="Top"/>
-                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="18" Height="20" Width="82" Text="Адрес:" Margin="7,0,0,0"/>
-                        <TextBlock x:Name="infoCity" HorizontalAlignment="Left" Margin="0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="18" Height="70" Width="337"><Run Text="{Binding Address, Mode=OneWay}"/></TextBlock>
+                    <StackPanel Orientation="Horizontal" Margin="0" VerticalAlignment="Top" Height="36">
+                        <materialDesign:PackIcon Kind="AddressMarker" Width="17" Height="17" VerticalAlignment="Top"/>
+                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Width="65" Text="Адрес:" Margin="7,0,0,0"/>
+                        <TextBlock x:Name="infoCity" HorizontalAlignment="Left" Margin="0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Width="337" Height="36"><Run Text="{Binding Address, Mode=OneWay}"/></TextBlock>
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Height="30">
-                        <materialDesign:PackIcon Kind="Face" Width="20" Height="20" VerticalAlignment="Center"/>
-                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="82" Margin="7,0,0,0"><Run Text="Manager:"/></TextBlock>
-                        <TextBlock x:Name="infoManager" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="337"><Run Text="{Binding Manager1Name, Mode=OneWay}"/></TextBlock>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Face" Width="17" Height="17" VerticalAlignment="Center"/>
+                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Width="65" Margin="7,0,0,0"><Run Text="Manager:"/></TextBlock>
+                        <TextBlock x:Name="infoManager" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Width="337"><Run Text="{Binding Manager1Name, Mode=OneWay}"/></TextBlock>
 
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Height="30">
-                        <materialDesign:PackIcon Kind="Phone" Width="20" Height="20" VerticalAlignment="Center"/>
-                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="82" Margin="7,0,0,0" Text="Телефон:Ж"/>
-                        <TextBlock x:Name="infoManager1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="337"><Run Text="{Binding Manager1Phone, Mode=OneWay}"/></TextBlock>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Phone" Width="17" Height="17" VerticalAlignment="Center"/>
+                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Width="65" Margin="7,0,0,0" Text="Телефон:"/>
+                        <TextBlock x:Name="infoManager1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Width="337"><Run Text="{Binding Manager1Phone, Mode=OneWay}"/></TextBlock>
 
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Height="30">
-                        <materialDesign:PackIcon Kind="Email" Width="20" Height="20" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
-                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="82" Margin="7,0,0,0" Text="Email:"/>
-                        <TextBlock x:Name="infoManager2" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Height="20" Width="337"><Run Text="{Binding Manager1Email, Mode=OneWay}"/></TextBlock>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Email" Width="17" Height="17" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
+                        <TextBlock Style="{DynamicResource ResourceKey=MaterialDesignHeadline6TextBlock}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Width="65" Margin="7,0,0,0" Text="Email:"/>
+                        <TextBlock x:Name="infoManager2" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Width="337"><Run Text="{Binding Manager1Email, Mode=OneWay}"/></TextBlock>
 
                     </StackPanel>
 
                 </StackPanel>
             </StackPanel>
         </Grid>
+
         <materialDesign:ColorZone
   Mode="PrimaryMid" VerticalAlignment="Top" Grid.Row="1" Grid.ColumnSpan="3" Height="66">
+
             <StackPanel
     Orientation="Horizontal"
     Margin="2">
@@ -823,6 +878,7 @@
                 </RadioButton>
             </StackPanel>
         </materialDesign:ColorZone>
+
         <materialDesign:ColorZone materialDesign:ShadowAssist.ShadowDepth="Depth3" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="4" Mode="PrimaryDark"  CornerRadius="5" Panel.ZIndex="1" Margin="0,0,0,0" VerticalAlignment="Stretch">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
                 <materialDesign:PackIcon x:Name="GlobalSqlStatus" Kind="CheckboxBlankCircle" Width="20" Height="20" VerticalAlignment="Center"/>
@@ -831,6 +887,7 @@
                 <materialDesign:PackIcon x:Name="LocalSqlStatus" Kind="CheckboxBlankCircle" Width="20" Height="20" VerticalAlignment="Center" Margin="50,0,0,0"/>
                 <TextBlock Text="Local DB" FontSize="16" Width="66" VerticalAlignment="Center" Margin="0,6"/>
                 <TextBlock x:Name="lcCount" FontSize="16" Width="75" VerticalAlignment="Center" Margin="15,6,0,6"/>
+                <TextBlock x:Name="uidTx" FontSize="16" Width="75" VerticalAlignment="Center" Margin="15,6,0,6"/>
                 <TextBlock x:Name="SyncStatus" FontSize="16" VerticalAlignment="Center" Margin="15,0,0,0"/>
                 <Button x:Name="SyncDB" Click="SyncDB_Click" Margin="15,3,0,3" Height="Auto" Visibility="Hidden" >
                     <materialDesign:PackIcon Kind="Sync"  VerticalAlignment="Center" HorizontalAlignment="Center" Width="Auto" Height="Auto" />
