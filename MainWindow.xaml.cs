@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.SQLite;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows;
@@ -26,118 +28,67 @@ namespace WpfApp1
 
         #region Переменные
         //Подключения к базам данных
-        private Database localSqlConnection;
-        private SqlConnection globalSqlConnection;
-        private SQLiteDataAdapter dataAdapter;
-        private GlobDataSet.CompaniesDataTable G_CompaniesDT;
-        private GlobDataSet GlobalDataSet;
+        private static Database _localSqlConnection;
+        private static SqlConnection _globalSqlConnection;
+        private SQLiteDataAdapter DataAdapter;
+        private static GlobDataSet.CompaniesDataTable _gCompaniesDt;
+
+        public static GlobDataSet GlobalDataSet;
+
         //Для парсера
-        private ParseWorker<string[]> Parser;
-        private TaskParser<string[]> TaskParser;
-        private List<string> myList;
-        private string[] LongListToTestComboVirtualization;
+        private ParseWorker<string[]> _parser;
+        private TaskParser<string[]> _taskParser;
+        private List<string> _myList;
+        private string[] _longListToTestComboVirtualization;
         //Для списка компаний
-        private List<Company> CompaniesRow;
-        private List<Company> SelectedCompanies;
-                    
-        private BitmapImage image;
-        private Company myNewItem;
+        private List<Company> _companiesRow;
+        private List<Company> _selectedCompanies;
+
+        private static BitmapImage _image;
+
         //Для почты
-        private List<myMailItem> AllMail;
-        private List<myMailItem> SelectedMail;
+        private List<MyMailItem> _allMail;
+        private List<MyMailItem> _selectedMail;
         //Для комментов
-        private List<Comment> AllComments;
-        private int Uid;
+        private List<Comment> _allComments;
+        private static int _intUid;
         #endregion
 
 
         public MainWindow()
         {
             InitializeComponent();
-
+            
         }
 
-        
 
-        private void DelEntrie_Click(object sender, RoutedEventArgs e)
+
+        private async void DelEntrie_Click(object sender, RoutedEventArgs e)
         {
 
             DelEntrie();
-            CheckSyncEntries();
+            await CheckSyncEntries().ConfigureAwait(false);
 
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            
-            CheckSyncEntries();
-            CompLogo.Source = image;
-            localSqlConnection = new Database();
-            AllComments = new List<Comment>();
+
+            CheckSyncEntries().ConfigureAwait(false);
+            CompLogo.Source = _image;
+            _localSqlConnection = new Database();
+            _allComments = new List<Comment>();
         }
 
-        //public void MyDataRefresh()
-        //{
-        //    #region Старый код
-        //    //SqlDataReader SqlReader = null;
-        //    //SqlCommand command = new SqlCommand("SELECT * FROM [Companies]", localSqlConnection);
+      
 
-        //    //try
-        //    //{
-        //    //    SqlReader = command.ExecuteReader();
-
-        //    //    while (SqlReader.Read())
-        //    //    {
-        //    //        string fullname = SqlReader["CompanyName"].ToString();
-        //    //        string shortname = SqlReader["ShortName"].ToString();
-        //    //        string managername = SqlReader["Manager1Name"].ToString();
-        //    //        string managerphone = SqlReader["Manager1Phone"].ToString();
-        //    //        string manageremail = SqlReader["Manager1Email"].ToString();
-        //    //        string email = SqlReader["CompanyEmail"].ToString();
-        //    //        string phone = SqlReader["CompanyPhone"].ToString();
-        //    //        string address = SqlReader["Address"].ToString();
-        //    //        string companyweb = SqlReader["URL"].ToString();
-        //    //        Image image = new Image();
-        //    //        string country = SqlReader["Country"].ToString();
-        //    //        string city = SqlReader["City"].ToString();
-        //    //        string anketaurl = SqlReader["AnketaUrl"].ToString();
-
-        //    //        CompanyItem newClassItem = new CompanyItem();
-        //    //        newClassItem.SetItem(fullname, shortname, managername, managerphone, manageremail,  email,  phone,  address,  companyweb, image,  country,  city,  anketaurl);
-        //    // myListBox.Items.Add(newClassItem);
-        //    //    }
-        //    //}
-        //    //catch (Exception ex)
-        //    //{
-        //    //    MessageBox.Show(ex.Message.ToString(), ex.Source.ToString());
-        //    //}
-        //    //finally
-        //    //{
-        //    //    if (SqlReader != null)
-        //    //    {
-        //    //        SqlReader.Close();
-        //    //    }
-        //    //}
-        //    #endregion
-
-        //    //companiesTableAdapter.Fill(companiesDT);
-
-        //    SQLiteCommand SelectCom = new SQLiteCommand("SELECT CompanyName,CompanyEmail,CompanyPhone FROM Companies",localSqlConnection.dbConnection);
-        //    dataAdapter.SelectCommand = SelectCom;
-        //    localSqlConnection.OpenConnection();
-        //    SQLiteDataReader reader = dataAdapter.SelectCommand.ExecuteReader();
-        //    localSqlConnection.CloseConnection();
-        //    CheckSyncEntries();
-
-        //}
-
-        private void AddEntrie_Click(object sender, RoutedEventArgs e)
+        private async void AddEntrie_Click(object sender, RoutedEventArgs e)
         {
             Company item = new Company();
 
             item.SetItem(company1.Text, "", managerName.Text, managerPhone.Text, managerEmail.Text, infoEmail1.Text, infoPhone1.Text, infoAddress1.Text, infoUrl1.Text, CompLogo, infoCity1.Text, infoCountry.Text, infoAnketa.Text);
             AddEntries(item);
-            CheckSyncEntries();
+            await CheckSyncEntries().ConfigureAwait(false);
             Info_Click(this, e);
             company1.Text = "";
             managerName.Text = "";
@@ -150,8 +101,8 @@ namespace WpfApp1
             infoCity1.Text = "";
             infoCountry.Text = "";
             infoAnketa.Text = "";
-            image = null;
-            CompLogo.Source = image;
+            _image = null;
+            CompLogo.Source = _image;
 
         }
 
@@ -185,35 +136,29 @@ namespace WpfApp1
 
         private void loadLogo_Click(object sender, RoutedEventArgs e)
         {
-            string imPath = "";
-            image = new BitmapImage();
-            OpenFileDialog open_dialog = new OpenFileDialog
+            _image = new BitmapImage();
+            OpenFileDialog openDialog = new OpenFileDialog
             {
                 Filter = "Image Files(*.BMP;*.JPG;*.GIF;*.PNG)|*.BMP;*.JPG;*.GIF;*.PNG|All files (*.*)|*.*" //формат загружаемого файла
             }; //создание диалогового окна для выбора файла
-            if (open_dialog.ShowDialog().HasValue) //если в окне была нажата кнопка "ОК"
+            if (openDialog.ShowDialog().HasValue) 
             {
                 try
                 {
-
-                    imPath = open_dialog.FileName.ToString();
-                    image.BeginInit();
-                    image.UriSource = new Uri(open_dialog.FileName, UriKind.Absolute);
-                    image.EndInit();
+                    _image.BeginInit();
+                    _image.UriSource = new Uri(openDialog.FileName, UriKind.Absolute);
+                    _image.EndInit();
 
 
-                    //image.Source = (ImageSource)open_dialog.FileName;
-                    //вместо pictureBox1 укажите pictureBox, в который нужно загрузить изображение 
-                    //this.pictureBox1.Size = image.Size;
-                    CompLogo.Source = image;
+                    
+                    CompLogo.Source = _image;
                     CompLogo.Stretch = Stretch.UniformToFill;
-                    open_dialog.Reset();
+                    openDialog.Reset();
 
                 }
-                catch
+                catch (Exception)
                 {
-                    //DialogResult rezult = MessageBox.Show("Невозможно открыть выбранный файл",
-                    //"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                 
                 }
             }
         }
@@ -222,116 +167,42 @@ namespace WpfApp1
 
         public void AddEntries(Company item) //Добавление записей
         {
-            int i = CompaniesRow.Where(w => w.CompanyName.Equals(item.CompanyName)).Count();
+            int i = _companiesRow.Where(w => w.CompanyName.Equals(item.CompanyName, StringComparison.CurrentCultureIgnoreCase)).Count();
             if (i == 0)
             {
-                SQLiteCommand AddCommand = new SQLiteCommand(@"INSERT INTO [Companies] (CompanyName,ShortName,Manager1Name,Manager1Phone,Manager1Email,CompanyEmail,CompanyPhone,Address,URL,Country,City,AnketaUrl) VALUES (@CompanyName,@ShortName,@Manager1Name,@Manager1Phone,@Manager1Email,@CompanyEmail,@CompanyPhone,@Address,@URL,@Country,@City,@AnketaUrl)", localSqlConnection.dbConnection);
-                AddCommand.Parameters.AddWithValue("CompanyName", item.CompanyName);
-                AddCommand.Parameters.AddWithValue("ShortName", item.ShortName);
-                AddCommand.Parameters.AddWithValue("Manager1Name", item.Manager1Name);
-                AddCommand.Parameters.AddWithValue("Manager1Phone", item.Manager1Phone);
-                AddCommand.Parameters.AddWithValue("Manager1Email", item.Manager1Email);
-                AddCommand.Parameters.AddWithValue("CompanyEmail", item.CompanyEmail);
-                AddCommand.Parameters.AddWithValue("CompanyPhone", item.CompanyPhone);
-                AddCommand.Parameters.AddWithValue("Address", item.Address);
-                AddCommand.Parameters.AddWithValue("URL", item.CompanyUrl);
-                AddCommand.Parameters.AddWithValue("Country", item.Country);
-                AddCommand.Parameters.AddWithValue("City", item.City);
-                AddCommand.Parameters.AddWithValue("AnketaUrl", item.AnketaUrl);
-                localSqlConnection.OpenConnection();
-                AddCommand.ExecuteNonQuery();
-                localSqlConnection.CloseConnection();
+                SQLiteCommand addCommand = new SQLiteCommand(@"INSERT INTO [Companies] (CompanyName,ShortName,Manager1Name,Manager1Phone,Manager1Email,CompanyEmail,CompanyPhone,Address,URL,Country,City,AnketaUrl) VALUES (@CompanyName,@ShortName,@Manager1Name,@Manager1Phone,@Manager1Email,@CompanyEmail,@CompanyPhone,@Address,@URL,@Country,@City,@AnketaUrl)", _localSqlConnection.DbConnection);
+                addCommand.Parameters.AddWithValue("CompanyName", item.CompanyName);
+                addCommand.Parameters.AddWithValue("ShortName", item.ShortName);
+                addCommand.Parameters.AddWithValue("Manager1Name", item.Manager1Name);
+                addCommand.Parameters.AddWithValue("Manager1Phone", item.Manager1Phone);
+                addCommand.Parameters.AddWithValue("Manager1Email", item.Manager1Email);
+                addCommand.Parameters.AddWithValue("CompanyEmail", item.CompanyEmail);
+                addCommand.Parameters.AddWithValue("CompanyPhone", item.CompanyPhone);
+                addCommand.Parameters.AddWithValue("Address", item.Address);
+                addCommand.Parameters.AddWithValue("URL", item.CompanyUrl);
+                addCommand.Parameters.AddWithValue("Country", item.Country);
+                addCommand.Parameters.AddWithValue("City", item.City);
+                addCommand.Parameters.AddWithValue("AnketaUrl", item.AnketaUrl);
+                _localSqlConnection.OpenConnection();
+                addCommand.ExecuteNonQuery();
+                _localSqlConnection.CloseConnection();
+                addCommand.Dispose();
             }
-            //if (item.logo != null)
-            //{
-            //    byte[] myLogo = null;
-            //    FileStream fileStream = new FileStream(new Uri(item.logo.Source.ToString()).LocalPath, FileMode.Open, FileAccess.Read);
-            //    BinaryReader binaryReader = new BinaryReader(fileStream);
-            //    myLogo = binaryReader.ReadBytes((int)fileStream.Length);
-            //    AddCommand = new SQLiteCommand($"UPDATE Companies SET logo = @logo where CompanyName = @name", localSqlConnection.dbConnection);
-            //    AddCommand.Parameters.Add(new SQLiteParameter("@logo", myLogo));
-            //    AddCommand.Parameters.AddWithValue("name", item.CompanyName);
-            //    AddCommand.ExecuteNonQuery();
-            //}
-
-            #region Код для LocalDB
-            // //DataSet1TableAdapters.CompaniesTableAdapter companiesNameMatchAdapter = new DataSet1TableAdapters.CompaniesTableAdapter();
-            // SQLiteDataAdapter companiesNameMatchAdapter = new SQLiteDataAdapter();
-            // companiesNameMatchAdapter.SelectCommand.CommandText = $"Select CompanyName from Companies where CompanyName = {item.CompanyName}";
-            // companiesNameMatchAdapter.SelectCommand.Connection = localSqlConnection.dbConnection;
-
-            // // DataSet1.CompaniesDataTable dt = new DataSet1.CompaniesDataTable();
-            // DataTable dt = new DataTable();
-            // companiesNameMatchAdapter.Fill(dt);
-            // DataTableReader CheckMatch = dt.CreateDataReader();
-            //// companiesNameMatchAdapter.CheckName(dt, item.CompanyName);
-            // int i = 0;
-            // while (CheckMatch.Read())
-
-            // {
-            //     i++;
-            // }
-            // if (i == 0)
-            // {
-
-
-            //     try
-            //     {
-
-
-            //         SQLiteCommand command = new SQLiteCommand("INSERT INTO [Companies] (CompanyName,ShortName,Manager1Name,Manager1Phone,Manager1Email,CompanyEmail,CompanyPhone,Address,URL,Country,City,AnketaUrl) VALUES (@CompanyName,@ShortName,@Manager1Name,@Manager1Phone,@Manager1Email,@CompanyEmail,@CompanyPhone,@Address,@URL,@Country,@City,@AnketaUrl)", localSqlConnection.dbConnection);
-            //         command.Parameters.AddWithValue("CompanyName", item.CompanyName);
-            //         command.Parameters.AddWithValue("ShortName", item.ShortName);
-            //         command.Parameters.AddWithValue("Manager1Name", item.Manager1Name);
-            //         command.Parameters.AddWithValue("Manager1Phone", item.Manager1Phone);
-            //         command.Parameters.AddWithValue("Manager1Email", item.Manager1Email);
-            //         command.Parameters.AddWithValue("CompanyEmail", item.CompanyEmail);
-            //         command.Parameters.AddWithValue("CompanyPhone", item.CompanyPhone);
-            //         command.Parameters.AddWithValue("Address", item.Address);
-            //         command.Parameters.AddWithValue("URL", item.CompanyUrl);
-            //         command.Parameters.AddWithValue("Country", item.Country);
-            //         command.Parameters.AddWithValue("City", item.City);
-            //         command.Parameters.AddWithValue("AnketaUrl", item.AnketaUrl);
-            //         command.ExecuteNonQuery();
-
-            //         if (item.logo != null)
-            //         {
-            //             byte[] myLogo = null;
-            //             FileStream fileStream = new FileStream(new Uri(item.logo.Source.ToString()).LocalPath, FileMode.Open, FileAccess.Read);
-            //             BinaryReader binaryReader = new BinaryReader(fileStream);
-            //             myLogo = binaryReader.ReadBytes((int)fileStream.Length);
-            //             command = new SQLiteCommand($"UPDATE Companies SET logo = @logo where CompanyName = @name", localSqlConnection.dbConnection);
-            //             command.Parameters.Add(new SqlParameter("@logo", myLogo));
-            //             command.Parameters.AddWithValue("name", item.CompanyName);
-            //             command.ExecuteNonQuery();
-            //         }
-
-
-            //     }
-            //     catch (Exception ex)
-            //     {
-            //         MessageBox.Show(ex.Message);
-            //     }
-            // }
-            // else
-            // {
-            //     //  MessageBox.Show("Запись уже существует", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Information);
-            // }
-            // CheckMatch.Close();
-            // MyDataRefresh();
-            #endregion
+            
+            
         }
 
         public async void DelEntrie()
         {
 
 
-            SQLiteCommand command = new SQLiteCommand("DELETE FROM [Companies] WHERE CompanyName=@name", localSqlConnection.dbConnection);
+            SQLiteCommand command = new SQLiteCommand("DELETE FROM [Companies] WHERE CompanyName=@name", _localSqlConnection.DbConnection);
             command.Parameters.AddWithValue("name", company.Text);
-            localSqlConnection.OpenConnection();
+            _localSqlConnection.OpenConnection();
             command.ExecuteNonQuery();
-            localSqlConnection.CloseConnection();
-            await CheckSyncEntries();
+            _localSqlConnection.CloseConnection();
+            await CheckSyncEntries().ConfigureAwait(false);
+            command.Dispose();
         }
 
         #endregion
@@ -341,18 +212,18 @@ namespace WpfApp1
         {
             try
             {
-                Outlook._Application _app = new Outlook.Application();
-                Outlook.MailItem mail = (Outlook.MailItem)_app.CreateItem(Outlook.OlItemType.olMailItem);
+                Outlook._Application app = new Outlook.Application();
+                Outlook.MailItem mail = (Outlook.MailItem)app.CreateItem(Outlook.OlItemType.olMailItem);
                 mail.To = textTo.Text;
                 mail.Body = textBody.Text;
                 mail.Subject = textSubject.Text;
                 mail.Importance = Outlook.OlImportance.olImportanceNormal;
                 mail.Send();
-                MessageBox.Show("Ваше сообщение успешно отправлено!", "Отправлено");
+                MessageBox.Show("Ваше сообщение успешно отправлено!");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Message", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, ex.Source, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -364,33 +235,33 @@ namespace WpfApp1
             Почта.Visibility = Visibility.Visible;
             Отправить.Visibility = Visibility.Hidden;
             Парсер.Visibility = Visibility.Hidden;
-            AllMail = new List<myMailItem>();
-            SelectedMail = new List<myMailItem>();
-            Outlook.MAPIFolder inbox = await Task.Factory.StartNew<Outlook.MAPIFolder>(
-                                             () => CheckMail(),
-                                             TaskCreationOptions.LongRunning);
+            _allMail = new List<MyMailItem>();
+            _selectedMail = new List<MyMailItem>();
+            CancellationTokenSource ctSource = new CancellationTokenSource();
+            var token = ctSource.Token;
+            Outlook.MAPIFolder inbox = await Task.Factory.StartNew <Outlook.MAPIFolder>(
+                                             () => CheckMail(),token,
+                                             TaskCreationOptions.LongRunning,TaskScheduler.Default).ConfigureAwait(true);
             foreach (Outlook.MailItem item in inbox.Items)
             {
-                myMailItem MailItem = new myMailItem();
-                
-                MailItem.SetMail(item.SenderEmailAddress, item.Subject, item.Body, item.SentOn.ToString());
-                AllMail.Add(MailItem);
-                
-                //if (MailItem.mailFrom == textFrom.Text)
-                //{
-                //    MailBox.Items.Add(MailItem);
-                //}
+                MyMailItem mailItem = new MyMailItem();
+
+                mailItem.SetMail(item.SenderEmailAddress, item.Subject, item.Body, item.SentOn.ToString(CultureInfo.InvariantCulture));
+                _allMail.Add(mailItem);
+
             }
-            SelectedMail = AllMail.Where(p => p.mailFrom.Contains(textFrom.Text)).ToList();
-            MailBox.ItemsSource = SelectedMail;
+            _selectedMail = _allMail.Where(p => p.MailFrom.Contains(textFrom.Text)).ToList();
+            MailBox.ItemsSource = _selectedMail;
+            ctSource.Dispose();
+            
         }
 
         public static Outlook.MAPIFolder CheckMail()
         {
 
-            Outlook._Application _app = new Outlook.Application();
-            Outlook._NameSpace _ns = _app.GetNamespace("MAPI");
-            Outlook.MAPIFolder inbox = _ns.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderInbox);
+            Outlook._Application app = new Outlook.Application();
+            Outlook._NameSpace ns = app.GetNamespace("MAPI");
+            Outlook.MAPIFolder inbox = ns.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderInbox);
             //_ns.SendAndReceive(true);
             return inbox;
 
@@ -405,12 +276,12 @@ namespace WpfApp1
                 try
                 {
 
-                    SelectedMail = AllMail.Where(p => p.mailFrom.Contains(textFrom.Text)).ToList();
-                    MailBox.ItemsSource = SelectedMail;
+                    _selectedMail = _allMail.Where(p => p.MailFrom.Contains(textFrom.Text)).ToList();
+                    MailBox.ItemsSource = _selectedMail;
                 }
                 catch (Exception ex)
                 {
-
+                    MessageBox.Show(ex.Message,ex.Source,MessageBoxButton.OK,MessageBoxImage.Warning);
                 }
             }
         }
@@ -424,60 +295,62 @@ namespace WpfApp1
             Добавить.Visibility = Visibility.Hidden;
             Отправить.Visibility = Visibility.Hidden;
             Парсер.Visibility = Visibility.Visible;
-            Parser = new ParseWorker<string[]>(new targetParser());
-            Parser.OnComplited += Parser_OnComplited;
-            Parser.OnNewData += Parser_OnNewData;
-            TaskParser = new TaskParser<string[]>(new taskParser());
-            TaskParser.OnComplitedTask += TaskParser_OnComplitedTask;
-            TaskParser.OnNewTask += TaskParser_OnNewTask;
-            myList = new List<string>();
-            LongListToTestComboVirtualization = new string[100];
+            _parser = new ParseWorker<string[]>(new targetParser());
+            _parser.OnComplited += ParserOnComplited;
+            _parser.OnNewData += ParserOnNewData;
+            _taskParser = new TaskParser<string[]>(new taskParser());
+            _taskParser.OnComplitedTask += TaskParser_OnComplitedTask;
+            _taskParser.OnNewTask += TaskParser_OnNewTask;
+            _myList = new List<string>();
+            _longListToTestComboVirtualization = new string[100];
 
             for (int i = 0; i < 100; i++)
             {
-                LongListToTestComboVirtualization[i] = (i + 1).ToString();
+                _longListToTestComboVirtualization[i] = (i + 1).ToString(CultureInfo.CurrentCulture);
             }
 
-            StartPage.ItemsSource = LongListToTestComboVirtualization;
-            EndPage.ItemsSource = LongListToTestComboVirtualization;
+            StartPage.ItemsSource = _longListToTestComboVirtualization;
+            EndPage.ItemsSource = _longListToTestComboVirtualization;
         }
 
         private void TaskParser_OnNewTask(object arg1, string[] list)
         {
-            myList.AddRange(list);
+            _myList.AddRange(list);
             Progress.Value = Progress.Value + 1;
 
         }
 
         private void TaskParser_OnComplitedTask(object obj)
         {
-            ParserBox.ItemsSource = myList;
+            ParserBox.ItemsSource = _myList;
             ParserBox.ItemsSource.GetEnumerator();
-            MessageBox.Show("Все страницы добавлены в задачу", "Готово!");
-            Parser.Settings = new targetParserSettings(TaskParser.Settings.BaseUrl, myList.ToArray(), myList.Count());
-            Parser.Start();
+            MessageBox.Show("Все страницы добавлены в задачу");
+            _parser.Settings = new targetParserSettings(_taskParser.Settings.BaseUrl, _myList.ToArray(), _myList.Count);
+            _parser.Start();
 
 
         }
 
-        public void Parser_OnComplited(object o)
+        public static void ParserOnComplited(object o)
         {
-            //parserResult.Show();
+          
             MessageBox.Show("Работа завершена!");
         }
 
-        public static string StripHTML(string HTMLText)
+        public static string StripHtml(string htmlText)
         {
-            string decode = HttpUtility.HtmlDecode(HTMLText);
+            string decode = HttpUtility.HtmlDecode(htmlText);
             return decode;
         }
 
-        public string Obrezat(string str)
+        public static string Obrezat(string str)
         {
+            
             char[] myChar = str.ToCharArray();
             int i = 0;
             try
             {
+
                 while (!myChar[i].Equals('>'))
                 {
                     myChar[i] = '\0';
@@ -502,15 +375,18 @@ namespace WpfApp1
 
                 }
                 myChar[i] = '\0';
+                
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, ex.Source, MessageBoxButton.OK, MessageBoxImage.Error);
             }
+               
+            
             string result = new string(myChar);
 
 
-            //  result.Substring(result.IndexOf(!null));
+           
             while (result.Contains("\0"))
             {
                 result = result.Replace("\0", "");
@@ -519,12 +395,12 @@ namespace WpfApp1
             return result;
         }
 
-        public void Parser_OnNewData(object o, string[] str, string[] name)
+        public void ParserOnNewData(object o, string[] str, string[] name)
         {
             Company parcerItem = new Company();
             string result = "";
             int a = 0, b = 0, d = 0;
-            for (int i = 0; i < str.Count(); i++)
+            for (int i = 0; i < str.Length; i++)
             {
                 switch (str[i])
                 {
@@ -538,7 +414,7 @@ namespace WpfApp1
                         break;
                     case "E-mail":
 
-                        result = StripHTML(Obrezat(str[i + 1]));
+                        result = StripHtml(Obrezat(str[i + 1]));
                         txEmail.Text = result;
                         break;
                     case "url":
@@ -550,29 +426,23 @@ namespace WpfApp1
 
             }
             txName.Text = name[0];
-            //txTel.Text = str[1];
-            //string result = Obrezat(str[2]);
-
-            //result = StripHTML(result);
-            //txEmail.Text = result;
-            //txUrl.Text = str[3];
-            //txCity.Text = str[0];
+          
 
 
             parcerItem.SetItem(name[0], "", "", "", "", result, str[b + 1], str[a + 1], str[d + 1], null, "", "", "");
 
 
             AddEntries(parcerItem);
-            Progress.Value = Progress.Value + (double)1;
+            Progress.Value = Progress.Value + 1;
 
         }
 
         private void Button_Click_6(object sender, RoutedEventArgs e)
         {
 
-            myList.Clear();
-            int TaskProgress = int.Parse(EndPage.Text) - int.Parse(EndPage.Text) + 1 + (int.Parse(EndPage.Text) - int.Parse(EndPage.Text) * 10);
-            Progress.Maximum = TaskProgress;
+            _myList.Clear();
+            int taskProgress = int.Parse(EndPage.Text, NumberStyles.Integer, CultureInfo.CurrentCulture) - int.Parse(EndPage.Text, NumberStyles.Integer, CultureInfo.CurrentCulture) + 1 + (int.Parse(EndPage.Text, NumberStyles.Integer, CultureInfo.CurrentCulture) - int.Parse(EndPage.Text, NumberStyles.Integer, CultureInfo.CurrentCulture) * 10);
+            Progress.Maximum = taskProgress;
             ParserResult parserResult = new ParserResult
             {
                 Owner = this
@@ -580,13 +450,13 @@ namespace WpfApp1
             parserResult.InitializeComponent();
             Progress.Value = 0;
             ParserBox.ItemsSource = "";
-            TaskParser.Settings = new TaskParserSettings(txWeb.Text, txWeb1.Text, int.Parse(StartPage.Text), int.Parse(EndPage.Text));
-            TaskParser.StartTask();
+            _taskParser.Settings = new TaskParserSettings(txWeb.Text, txWeb1.Text, int.Parse(StartPage.Text, NumberStyles.Integer, CultureInfo.CurrentCulture), int.Parse(EndPage.Text, NumberStyles.Integer, CultureInfo.CurrentCulture));
+            _taskParser.StartTask();
         }
 
         private void Button_Click_7(object sender, RoutedEventArgs e)
         {
-            Parser.Stop();
+            _parser.Stop();
         }
 
         #endregion
@@ -594,9 +464,9 @@ namespace WpfApp1
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
 
-            //dataView.RowFilter = $"CompanyName LIKE '%{SearchBox.Text}%' AND CompanyName NOT LIKE ''";
-            SelectedCompanies = CompaniesRow.Where(w => w.CompanyName.Contains(SearchBox.Text)).ToList();
-            myListBox.ItemsSource = SelectedCompanies;
+           
+            _selectedCompanies = _companiesRow.Where(w => w.CompanyName.Contains(SearchBox.Text)).ToList();
+            myListBox.ItemsSource = _selectedCompanies;
         }
 
         #region Работа с базой данных
@@ -606,14 +476,14 @@ namespace WpfApp1
         ///</summary>
         private async Task LocalSqlConnection()
         {
-            // localSqlConnection = new SqlConnection(@"data source=D:\Projects\CPP\VisStudio\WpfApp1\Companies.db;Password=2268728");
+           
 
-            SQLiteConnection dbConnection = localSqlConnection.dbConnection;
+            SQLiteConnection dbConnection = _localSqlConnection.DbConnection;
 
 
             try
             {
-                await dbConnection.OpenAsync();
+                await dbConnection.OpenAsync().ConfigureAwait(true);
                 LocalSqlStatus.Foreground = Brushes.Green;
             }
             catch (Exception ex)
@@ -622,78 +492,53 @@ namespace WpfApp1
                 LocalSqlStatus.Foreground = Brushes.Red;
             }
 
-
-
-            //LocalDataSet = new DataSet1();
-            //companiesDT = new DataSet1.CompaniesDataTable();
-            //companiesTableAdapter = new DataSet1TableAdapters.CompaniesTableAdapter();
-
-
-
-            //dataAdapter.SelectCommand = command;
-
-
-            #region создание таблицы
-            //companiesDT = new DataTable();
-            //companiesDT.Columns.Add("CompanyName");
-            //companiesDT.Columns.Add("ShortName");
-            //companiesDT.Columns.Add("Manager1Name");
-            //companiesDT.Columns.Add("Manager1Phone");
-            //companiesDT.Columns.Add("Manager1Email");
-            //companiesDT.Columns.Add("CompanyEmail");
-            //companiesDT.Columns.Add("CompanyPhone");
-            //companiesDT.Columns.Add("Address");
-            //companiesDT.Columns.Add("URL");
-            //companiesDT.Columns.Add("logo");
-            //companiesDT.Columns.Add("Country");
-            //companiesDT.Columns.Add("City");
-            //companiesDT.Columns.Add("AnketaUrl");
-            #endregion
-
-
-            dataAdapter = new SQLiteDataAdapter();
+            
+            DataAdapter = new SQLiteDataAdapter();
             SQLiteCommand command = new SQLiteCommand("Select * FROM Companies", dbConnection);
-            localSqlConnection.OpenConnection();
-            SQLiteDataReader SqlReader = command.ExecuteReader();
-            CompaniesRow = new List<Company>();
-            if (SqlReader.FieldCount > 0)
+            _localSqlConnection.OpenConnection();
+            SQLiteDataReader sqlReader = command.ExecuteReader();
+            _companiesRow = new List<Company>();
+            if (sqlReader.FieldCount > 0)
             {
-                while (SqlReader.Read())
+                while (sqlReader.Read())
                 {
-                    string fullname = SqlReader["CompanyName"].ToString();
-                    string shortname = SqlReader["ShortName"].ToString();
-                    string managername = SqlReader["Manager1Name"].ToString();
-                    string managerphone = SqlReader["Manager1Phone"].ToString();
-                    string manageremail = SqlReader["Manager1Email"].ToString();
-                    string email = SqlReader["CompanyEmail"].ToString();
-                    string phone = SqlReader["CompanyPhone"].ToString();
-                    string address = SqlReader["Address"].ToString();
-                    string companyweb = SqlReader["URL"].ToString();
-                    string country = SqlReader["Country"].ToString();
-                    string city = SqlReader["City"].ToString();
-                    string anketaurl = SqlReader["AnketaUrl"].ToString();
+                    string fullname = sqlReader["CompanyName"].ToString();
+                    string shortname = sqlReader["ShortName"].ToString();
+                    string managername = sqlReader["Manager1Name"].ToString();
+                    string managerphone = sqlReader["Manager1Phone"].ToString();
+                    string manageremail = sqlReader["Manager1Email"].ToString();
+                    string email = sqlReader["CompanyEmail"].ToString();
+                    string phone = sqlReader["CompanyPhone"].ToString();
+                    string address = sqlReader["Address"].ToString();
+                    string companyweb = sqlReader["URL"].ToString();
+                    string country = sqlReader["Country"].ToString();
+                    string city = sqlReader["City"].ToString();
+                    string anketaurl = sqlReader["AnketaUrl"].ToString();
 
                     Company newClassItem = new Company();
                     newClassItem.SetItem(fullname, shortname, managername, managerphone, manageremail, email, phone, address, companyweb, null, country, city, anketaurl);
-                    CompaniesRow.Add(newClassItem);
+                    _companiesRow.Add(newClassItem);
 
                 }
             }
-
-            command = new SQLiteCommand("SELECT Value FROM Settings WHERE Param='Uid'", localSqlConnection.dbConnection);
-            SqlReader = command.ExecuteReader();
-            while (SqlReader.Read())
+            command.Dispose();
+            sqlReader.Dispose();
+            command = new SQLiteCommand("SELECT Value FROM Settings WHERE Param='Uid'", _localSqlConnection.DbConnection);
+            sqlReader = command.ExecuteReader();
+            while (sqlReader.Read())
             {
-               
-                Uid = int.Parse(SqlReader["Value"].ToString());
+
+                _intUid = int.Parse(sqlReader["Value"].ToString(), CultureInfo.CurrentCulture);
             }
-           
-            SelectedCompanies = CompaniesRow;
-            myListBox.ItemsSource = SelectedCompanies;
+
+            _selectedCompanies = _companiesRow;
+            myListBox.ItemsSource = _selectedCompanies;
 
             //companiesTableAdapter.Fill(companiesDT);
 
-            localSqlConnection.CloseConnection();
+            _localSqlConnection.CloseConnection();
+            command.Dispose();
+            sqlReader.Dispose();
         }
 
         ///<summary>
@@ -701,12 +546,12 @@ namespace WpfApp1
         ///</summary>
         private async Task GlobalSqlConnection()
         {
-            globalSqlConnection = new SqlConnection(@"Data Source=marinedb.ddns.net;User ID=myUser;Password=111222;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            _globalSqlConnection = new SqlConnection(@"Data Source=marinedb.ddns.net;User ID=myUser;Password=111222;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
 
 
             try
             {
-                await globalSqlConnection.OpenAsync();
+                await _globalSqlConnection.OpenAsync().ConfigureAwait(true);
                 GlobalSqlStatus.Foreground = Brushes.Green;
             }
             catch (Exception ex)
@@ -716,17 +561,17 @@ namespace WpfApp1
             }
 
             GlobalDataSet = new GlobDataSet();
-            G_CompaniesDT = new GlobDataSet.CompaniesDataTable();
-            GlobDataSetTableAdapters.CompaniesTableAdapter G_CompaniesTA = new GlobDataSetTableAdapters.CompaniesTableAdapter();
-            G_CompaniesTA.Fill(G_CompaniesDT);
-            glCount.Text = G_CompaniesDT.Rows.Count.ToString();
-
+            _gCompaniesDt = new GlobDataSet.CompaniesDataTable();
+            GlobDataSetTableAdapters.CompaniesTableAdapter gCompaniesTa = new GlobDataSetTableAdapters.CompaniesTableAdapter();
+            gCompaniesTa.Fill(_gCompaniesDt);
+            glCount.Text = _gCompaniesDt.Rows.Count.ToString(CultureInfo.CurrentCulture);
+            gCompaniesTa.Dispose();
         }
 
         /// Кнопка синхронизации баз данных
         private void SyncDB_Click(object sender, RoutedEventArgs e)
         {
-            SyncronizeDB();
+            SyncronizeDb();
         }
 
         /// <summary>
@@ -734,19 +579,19 @@ namespace WpfApp1
         /// </summary>
         private async Task CheckSyncEntries()
         {
-            await GlobalSqlConnection();
-            await LocalSqlConnection();
-            dataAdapter = new SQLiteDataAdapter();
-            SQLiteCommand command = new SQLiteCommand("Select * FROM Companies", localSqlConnection.dbConnection);
-            localSqlConnection.OpenConnection();
+            await GlobalSqlConnection().ConfigureAwait(true);
+            await LocalSqlConnection().ConfigureAwait(true);
+            DataAdapter = new SQLiteDataAdapter();
+            SQLiteCommand command = new SQLiteCommand("Select * FROM Companies", _localSqlConnection.DbConnection);
+            _localSqlConnection.OpenConnection();
             SQLiteDataReader reader = command.ExecuteReader();
             int i = 0;
             while (reader.Read())
             { i++; }
-            lcCount.Text = i.ToString();
-            localSqlConnection.CloseConnection();
-            uidTx.Text = Uid.ToString();
-            if (int.Parse(glCount.Text) != int.Parse(lcCount.Text))
+            lcCount.Text = i.ToString(CultureInfo.CurrentCulture);
+            _localSqlConnection.CloseConnection();
+            uidTx.Text = _intUid.ToString(CultureInfo.CurrentCulture);
+            if (int.Parse(glCount.Text,NumberStyles.AllowLeadingWhite ,CultureInfo.CurrentCulture) != int.Parse(lcCount.Text, NumberStyles.AllowLeadingWhite, CultureInfo.CurrentCulture))
             {
                 SyncStatus.Text = "Необходимо синхронизировать базы данных";
                 SyncDB.Visibility = Visibility.Visible;
@@ -756,84 +601,91 @@ namespace WpfApp1
                 SyncStatus.Text = "Базы данных синхронны.";
                 SyncDB.Visibility = Visibility.Hidden;
             }
-
+            command.Dispose();
         }
 
 
-        private async void SyncronizeDB()
+        private async void SyncronizeDb()
         {
-            SQLiteCommand L_Command = new SQLiteCommand("Select * from Companies", localSqlConnection.dbConnection);
-            localSqlConnection.OpenConnection();
-            SQLiteDataReader LocalReader = L_Command.ExecuteReader();
+            SQLiteCommand lCommand = new SQLiteCommand("Select * from Companies", _localSqlConnection.DbConnection);
+            _localSqlConnection.OpenConnection();
+            SQLiteDataReader localReader = lCommand.ExecuteReader();
             // DataTableReader LocalReader = companiesDT.CreateDataReader();
-            DataTableReader GlobalReader = G_CompaniesDT.CreateDataReader();
-            while (await LocalReader.ReadAsync())
+            DataTableReader globalReader = _gCompaniesDt.CreateDataReader();
+            while (await localReader.ReadAsync().ConfigureAwait(true))
             {
-                int i = G_CompaniesDT.Select($"CompanyName = '{LocalReader["CompanyName"].ToString()}'").Count();
+                int i = _gCompaniesDt.Select($"CompanyName = '{localReader["CompanyName"]}'").Length;
                 if (i == 0)
                 {
-                    SqlCommand G_AddRow = new SqlCommand("INSERT INTO [Companies] (CompanyName,ShortName,Manager1Name,Manager1Phone,Manager1Email,CompanyEmail,CompanyPhone,Address,URL,Country,City,AnketaUrl) VALUES (@CompanyName,@ShortName,@Manager1Name,@Manager1Phone,@Manager1Email,@CompanyEmail,@CompanyPhone,@Address,@URL,@Country,@City,@AnketaUrl)", globalSqlConnection);
-                    G_AddRow.Parameters.AddWithValue("CompanyName", LocalReader["CompanyName"]);
-                    G_AddRow.Parameters.AddWithValue("ShortName", LocalReader["ShortName"]);
-                    G_AddRow.Parameters.AddWithValue("Manager1Name", LocalReader["Manager1Name"]);
-                    G_AddRow.Parameters.AddWithValue("Manager1Phone", LocalReader["Manager1Phone"]);
-                    G_AddRow.Parameters.AddWithValue("Manager1Email", LocalReader["Manager1Email"]);
-                    G_AddRow.Parameters.AddWithValue("CompanyEmail", LocalReader["CompanyEmail"]);
-                    G_AddRow.Parameters.AddWithValue("CompanyPhone", LocalReader["CompanyPhone"]);
-                    G_AddRow.Parameters.AddWithValue("Address", LocalReader["Address"]);
-                    G_AddRow.Parameters.AddWithValue("URL", LocalReader["URL"]);
-                    G_AddRow.Parameters.AddWithValue("Country", LocalReader["Country"]);
-                    G_AddRow.Parameters.AddWithValue("City", LocalReader["City"]);
-                    G_AddRow.Parameters.AddWithValue("AnketaUrl", LocalReader["AnketaUrl"]);
+                    SqlCommand gAddRow = new SqlCommand("INSERT INTO [Companies] (CompanyName,ShortName,Manager1Name,Manager1Phone,Manager1Email,CompanyEmail,CompanyPhone,Address,URL,Country,City,AnketaUrl) VALUES (@CompanyName,@ShortName,@Manager1Name,@Manager1Phone,@Manager1Email,@CompanyEmail,@CompanyPhone,@Address,@URL,@Country,@City,@AnketaUrl)", _globalSqlConnection);
+                    gAddRow.Parameters.AddWithValue("CompanyName", localReader["CompanyName"]);
+                    gAddRow.Parameters.AddWithValue("ShortName", localReader["ShortName"]);
+                    gAddRow.Parameters.AddWithValue("Manager1Name", localReader["Manager1Name"]);
+                    gAddRow.Parameters.AddWithValue("Manager1Phone", localReader["Manager1Phone"]);
+                    gAddRow.Parameters.AddWithValue("Manager1Email", localReader["Manager1Email"]);
+                    gAddRow.Parameters.AddWithValue("CompanyEmail", localReader["CompanyEmail"]);
+                    gAddRow.Parameters.AddWithValue("CompanyPhone", localReader["CompanyPhone"]);
+                    gAddRow.Parameters.AddWithValue("Address", localReader["Address"]);
+                    gAddRow.Parameters.AddWithValue("URL", localReader["URL"]);
+                    gAddRow.Parameters.AddWithValue("Country", localReader["Country"]);
+                    gAddRow.Parameters.AddWithValue("City", localReader["City"]);
+                    gAddRow.Parameters.AddWithValue("AnketaUrl", localReader["AnketaUrl"]);
                     // G_AddRow.Parameters.Add(new SqlParameter("@logo", LocalReader["logo"]));
-                    await G_AddRow.ExecuteNonQueryAsync();
+                    await gAddRow.ExecuteNonQueryAsync().ConfigureAwait(true);
+                    gAddRow.Dispose();
                 }
             }
-            while (await GlobalReader.ReadAsync())
+            lCommand.Dispose();
+            while (await globalReader.ReadAsync().ConfigureAwait(true))
             {
-                int i = CompaniesRow.Where(w => w.CompanyName.Equals(GlobalReader["CompanyName"].ToString())).Count();
+                int i = _companiesRow.Count(w => w.CompanyName.Equals(globalReader["CompanyName"].ToString(),StringComparison.CurrentCulture));
                 if (i == 0)
                 {
-                    SQLiteCommand L_AddRow = new SQLiteCommand("INSERT INTO [Companies] (CompanyName,ShortName,Manager1Name,Manager1Phone,Manager1Email,CompanyEmail,CompanyPhone,Address,URL,Country,City,AnketaUrl) VALUES (@CompanyName,@ShortName,@Manager1Name,@Manager1Phone,@Manager1Email,@CompanyEmail,@CompanyPhone,@Address,@URL,@Country,@City,@AnketaUrl)", localSqlConnection.dbConnection);
-                    L_AddRow.Parameters.AddWithValue("CompanyName", GlobalReader["CompanyName"]);
-                    L_AddRow.Parameters.AddWithValue("ShortName", GlobalReader["ShortName"]);
-                    L_AddRow.Parameters.AddWithValue("Manager1Name", GlobalReader["Manager1Name"]);
-                    L_AddRow.Parameters.AddWithValue("Manager1Phone", GlobalReader["Manager1Phone"]);
-                    L_AddRow.Parameters.AddWithValue("Manager1Email", GlobalReader["Manager1Email"]);
-                    L_AddRow.Parameters.AddWithValue("CompanyEmail", GlobalReader["CompanyEmail"]);
-                    L_AddRow.Parameters.AddWithValue("CompanyPhone", GlobalReader["CompanyPhone"]);
-                    L_AddRow.Parameters.AddWithValue("Address", GlobalReader["Address"]);
-                    L_AddRow.Parameters.AddWithValue("URL", GlobalReader["URL"]);
-                    L_AddRow.Parameters.AddWithValue("Country", GlobalReader["Country"]);
-                    L_AddRow.Parameters.AddWithValue("City", GlobalReader["City"]);
-                    L_AddRow.Parameters.AddWithValue("AnketaUrl", GlobalReader["AnketaUrl"]);
+                    SQLiteCommand lAddRow = new SQLiteCommand("INSERT INTO [Companies] (CompanyName,ShortName,Manager1Name,Manager1Phone,Manager1Email,CompanyEmail,CompanyPhone,Address,URL,Country,City,AnketaUrl) VALUES (@CompanyName,@ShortName,@Manager1Name,@Manager1Phone,@Manager1Email,@CompanyEmail,@CompanyPhone,@Address,@URL,@Country,@City,@AnketaUrl)", _localSqlConnection.DbConnection);
+                    lAddRow.Parameters.AddWithValue("CompanyName", globalReader["CompanyName"]);
+                    lAddRow.Parameters.AddWithValue("ShortName", globalReader["ShortName"]);
+                    lAddRow.Parameters.AddWithValue("Manager1Name", globalReader["Manager1Name"]);
+                    lAddRow.Parameters.AddWithValue("Manager1Phone", globalReader["Manager1Phone"]);
+                    lAddRow.Parameters.AddWithValue("Manager1Email", globalReader["Manager1Email"]);
+                    lAddRow.Parameters.AddWithValue("CompanyEmail", globalReader["CompanyEmail"]);
+                    lAddRow.Parameters.AddWithValue("CompanyPhone", globalReader["CompanyPhone"]);
+                    lAddRow.Parameters.AddWithValue("Address", globalReader["Address"]);
+                    lAddRow.Parameters.AddWithValue("URL", globalReader["URL"]);
+                    lAddRow.Parameters.AddWithValue("Country", globalReader["Country"]);
+                    lAddRow.Parameters.AddWithValue("City", globalReader["City"]);
+                    lAddRow.Parameters.AddWithValue("AnketaUrl", globalReader["AnketaUrl"]);
                     // L_AddRow.Parameters.Add(new SQLiteParameter("@logo", GlobalReader["logo"]));
-                    await L_AddRow.ExecuteNonQueryAsync();
+                    await lAddRow.ExecuteNonQueryAsync().ConfigureAwait(true);
+                    lAddRow.Dispose();
                 }
             }
-            localSqlConnection.CloseConnection();
-            await CheckSyncEntries();
+            
+            _localSqlConnection.CloseConnection();
+            await CheckSyncEntries().ConfigureAwait(true);
         }
 
 
 
         #endregion
 
+        #region Комментарии
+
         private void AddComment_Click(object sender, RoutedEventArgs e)
         {
-            string time = System.DateTime.UtcNow.ToString();
-            Comment NewComment = new Comment(company.Text,AuthorTX.Text,CommentTX.Text,Uid,time);
-            NewComment.AddComment(globalSqlConnection);
-            AllComments.Add(NewComment);
-            CommentBox.ItemsSource = AllComments;
+            string time = DateTime.UtcNow.ToString(CultureInfo.CurrentCulture);
+            Comment newComment = new Comment(company.Text, AuthorTX.Text, CommentTX.Text, _intUid, time);
+            newComment.AddComment(_globalSqlConnection);
+            _allComments.Add(newComment);
+            CommentBox.ItemsSource = _allComments;
         }
 
         private async void company_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             Company item = (Company)myListBox.SelectedItem;
-            Comment comment = new Comment(item.CompanyName, "","",0,"");
-            AllComments = await comment.GetCommentsAsync(item.CompanyName, globalSqlConnection);
-            CommentBox.ItemsSource = AllComments;
+            Comment comment = new Comment();
+            _allComments = await comment.GetCommentsAsync(item.CompanyName, _globalSqlConnection).ConfigureAwait(true);
+            CommentBox.ItemsSource = _allComments;
         }
+        #endregion
     }
 }

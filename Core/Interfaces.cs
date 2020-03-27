@@ -1,6 +1,7 @@
 ﻿using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using System;
+using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -12,27 +13,27 @@ namespace WpfApp1.Core
     /// </summary>
     internal class HtmlLoader
     {
-        private readonly HttpClient client;
-        private readonly string url;
+        private readonly HttpClient _client;
+        private readonly string _url;
 
 
         public HtmlLoader(IParserSettings settings)
         {
 
-            client = new HttpClient();
-            client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.136 YaBrowser/20.2.4.143 Yowser/2.5 Safari/537.36");
-            url = $"{settings.BaseUrl}{settings.UrlList[0]}";
+            _client = new HttpClient();
+            _client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.136 YaBrowser/20.2.4.143 Yowser/2.5 Safari/537.36");
+            _url = $"{settings.BaseUrl}{settings.UrlList[0]}";
         }
 
-        public async Task<string> GetSourceByList(string Url)
+        public async Task<string> GetSourceByList(string url)
         {
             //string currentUrl = url.Replace("{CurrentId}", Url);
-            HttpResponseMessage responseMessage = await client.GetAsync(Url); //поменять на currentUrl
+            HttpResponseMessage responseMessage = await _client.GetAsync(url).ConfigureAwait(true); //поменять на currentUrl
             string source = default;
 
             if (responseMessage != null && responseMessage.StatusCode == HttpStatusCode.OK)
             {
-                source = await responseMessage.Content.ReadAsStringAsync();
+                source = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(true);
             }
             return source;
         }
@@ -44,27 +45,27 @@ namespace WpfApp1.Core
     /// </summary>
     internal class TaskHtmlLoader
     {
-        private readonly HttpClient client;
-        private readonly string url;
-        private readonly int currentPage;
+        private readonly HttpClient _client;
+        private readonly string _url;
+        private readonly int _currentPage;
 
         public TaskHtmlLoader(IParserTaskSettings settings)
         {
-            currentPage = settings.StartPoint;
-            client = new HttpClient();
-            client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.136 YaBrowser/20.2.4.143 Yowser/2.5 Safari/537.36");
-            url = $"{settings.BaseUrl}{settings.Postfix}{settings.StartPoint}";
+            _currentPage = settings.StartPoint;
+            _client = new HttpClient();
+            _client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.136 YaBrowser/20.2.4.143 Yowser/2.5 Safari/537.36");
+            _url = $"{settings.BaseUrl}{settings.Postfix}{settings.StartPoint}";
         }
 
         public async Task<string> GetSourceByPage(int page)
         {
-            string currentUrl = url.Replace(currentPage.ToString(), page.ToString());
-            HttpResponseMessage responseMessage = await client.GetAsync(currentUrl); //поменять на currentUrl
+            string currentUrl = _url.Replace(_currentPage.ToString(CultureInfo.CurrentCulture), page.ToString(CultureInfo.CurrentCulture));
+            HttpResponseMessage responseMessage = await _client.GetAsync(currentUrl).ConfigureAwait(true); //поменять на currentUrl
             string source = default;
 
             if (responseMessage != null && responseMessage.StatusCode == HttpStatusCode.OK)
             {
-                source = await responseMessage.Content.ReadAsStringAsync();
+                source = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(true);
             }
             return source;
         }
@@ -113,59 +114,59 @@ namespace WpfApp1.Core
     /// <typeparam name="T"></typeparam>
     internal class TaskParser<T> where T : class
     {
-        private TaskHtmlLoader loader;
-        private bool isActive;
-        private IParserTask<T> parserTask;
-        private IParserTaskSettings parserTaskSettings;
+        private TaskHtmlLoader _loader;
+        private bool _isActive;
+        private IParserTask<T> _parserTask;
+        private IParserTaskSettings _parserTaskSettings;
         public IParserTask<T> ParserTask
         {
-            get => parserTask;
-            set => parserTask = value;
+            get => _parserTask;
+            set => _parserTask = value;
         }
 
-        public bool IsActive => isActive;
+        public bool IsActive => _isActive;
         public IParserTaskSettings Settings
         {
-            get => parserTaskSettings;
+            get => _parserTaskSettings;
             set
             {
-                parserTaskSettings = value; //Новые настройки парсера
-                loader = new TaskHtmlLoader(value); //сюда помещаются настройки для загрузчика кода страницы
+                _parserTaskSettings = value; //Новые настройки парсера
+                _loader = new TaskHtmlLoader(value); //сюда помещаются настройки для загрузчика кода страницы
             }
         }
         public event Action<object> OnComplitedTask;
         public event Action<object, T> OnNewTask;
         public TaskParser(IParserTask<T> parserTask)
         {
-            this.parserTask = parserTask;
+            this._parserTask = parserTask;
         }
         public void StartTask()
         {
-            isActive = true;
+            _isActive = true;
             Tasker();
         }
 
         public void Stop()
         {
-            isActive = false;
+            _isActive = false;
         }
         public async void Tasker()
         {
-            for (int i = parserTaskSettings.StartPoint; i <= parserTaskSettings.EndPoint; i++)
+            for (int i = _parserTaskSettings.StartPoint; i <= _parserTaskSettings.EndPoint; i++)
             {
-                if (isActive)
+                if (_isActive)
                 {
-                    string source = await loader.GetSourceByPage(i);
+                    string source = await _loader.GetSourceByPage(i).ConfigureAwait(true);
                     HtmlParser taskParser = new HtmlParser();
-                    IHtmlDocument document = await taskParser.ParseDocumentAsync(source);
-                    T Task = parserTask.TaskParser(document, parserTaskSettings.BaseUrl);
+                    IHtmlDocument document = await taskParser.ParseDocumentAsync(source).ConfigureAwait(true);
+                    T Task = _parserTask.TaskParser(document, _parserTaskSettings.BaseUrl);
                     OnNewTask?.Invoke(this, Task);
 
                 }
 
             }
             OnComplitedTask?.Invoke(this);
-            isActive = false;
+            _isActive = false;
         }
 
     }
@@ -176,27 +177,27 @@ namespace WpfApp1.Core
     /// <typeparam name="T"></typeparam>
     internal class ParseWorker<T> where T : class
     {
-        private IParser<T> parser;
-        private IParserSettings parserSettings;
-        private HtmlLoader loader;
-        private bool isActive;
+        private IParser<T> _parser;
+        private IParserSettings _parserSettings;
+        private HtmlLoader _loader;
+        private bool _isActive;
 
         public IParser<T> Parser
         {
-            get => parser;
-            set => parser = value;
+            get => _parser;
+            set => _parser = value;
         }
         public IParserSettings Settings
         {
-            get => parserSettings;
+            get => _parserSettings;
             set
             {
-                parserSettings = value;
-                loader = new HtmlLoader(value);
+                _parserSettings = value;
+                _loader = new HtmlLoader(value);
             }
         }
 
-        public bool IsActive => isActive;
+        public bool IsActive => _isActive;
 
         public event Action<object, T, T> OnNewData;
         public event Action<object> OnComplited;
@@ -205,35 +206,35 @@ namespace WpfApp1.Core
 
         public ParseWorker(IParser<T> parser)
         {
-            this.parser = parser;
+            this._parser = parser;
         }
         public void Start()
         {
-            isActive = true;
+            _isActive = true;
             Worker();
         }
         public void Stop()
         {
-            isActive = false;
+            _isActive = false;
         }
         public async void Worker()
         {
-            for (int i = 0; i < parserSettings.EndPoint; i++)
+            for (int i = 0; i < _parserSettings.EndPoint; i++)
             {
-                if (isActive)
+                if (_isActive)
                 {
-                    string source = await loader.GetSourceByList(parserSettings.UrlList[i]); //здесь должно быть не так
+                    string source = await _loader.GetSourceByList(_parserSettings.UrlList[i]).ConfigureAwait(true); //здесь должно быть не так
 
                     HtmlParser domParser = new HtmlParser();
-                    IHtmlDocument document = await domParser.ParseDocumentAsync(source);
-                    T result = parser.Parse(document, parserSettings.BaseUrl);
-                    T compName = parser.ParseName(document, parserSettings.BaseUrl);
+                    IHtmlDocument document = await domParser.ParseDocumentAsync(source).ConfigureAwait(true);
+                    T result = _parser.Parse(document, _parserSettings.BaseUrl);
+                    T compName = _parser.ParseName(document, _parserSettings.BaseUrl);
                     OnNewData?.Invoke(this, result, compName);
                 }
 
             }
             OnComplited?.Invoke(this);
-            isActive = false;
+            _isActive = false;
         }
 
     }

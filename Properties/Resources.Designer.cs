@@ -98,9 +98,9 @@ namespace WpfApp1.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
-        internal static byte[] CrewingCompanies1_1_01 {
+        internal static byte[] Companies {
             get {
-                object obj = ResourceManager.GetObject("CrewingCompanies1_1_01", resourceCulture);
+                object obj = ResourceManager.GetObject("Companies", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -263,6 +263,16 @@ namespace WpfApp1.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Byte[].
         /// </summary>
+        internal static byte[] sqlite3 {
+            get {
+                object obj = ResourceManager.GetObject("sqlite3", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
         internal static byte[] SQLitePCLRaw_batteries_v2 {
             get {
                 object obj = ResourceManager.GetObject("SQLitePCLRaw_batteries_v2", resourceCulture);
@@ -311,8 +321,7 @@ namespace WpfApp1.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&lt;span&gt;
-        ///&lt;doc&gt;
+        ///   Ищет локализованную строку, похожую на &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&lt;doc&gt;
         ///  &lt;assembly&gt;
         ///    &lt;name&gt;System.Buffers&lt;/name&gt;
         ///  &lt;/assembly&gt;
@@ -322,7 +331,7 @@ namespace WpfApp1.Properties {
         ///      &lt;typeparam name=&quot;T&quot;&gt;The type of the objects that are in the resource pool.&lt;/typeparam&gt;
         ///    &lt;/member&gt;
         ///    &lt;member name=&quot;M:System.Buffers.ArrayPool`1.#ctor&quot;&gt;
-        ///      &lt;summary&gt;Initializes a new instance of the &lt;see c [остаток строки не уместился]&quot;;.
+        ///      &lt;summary&gt;Initializes a new instance of the &lt;see cref=&quot;T:S [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string System_Buffers1 {
             get {
@@ -453,8 +462,7 @@ namespace WpfApp1.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&lt;span&gt;
-        ///&lt;doc&gt;
+        ///   Ищет локализованную строку, похожую на &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&lt;doc&gt;
         ///  &lt;assembly&gt;
         ///    &lt;name&gt;System.Numerics.Vectors&lt;/name&gt;
         ///  &lt;/assembly&gt;
@@ -464,7 +472,7 @@ namespace WpfApp1.Properties {
         ///    &lt;/member&gt;
         ///    &lt;member name=&quot;M:System.Numerics.Matrix3x2.#ctor(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)&quot;&gt;
         ///      &lt;summary&gt;Creates a 3x2 matrix from the specified components.&lt;/summary&gt;
-        ///      &lt;param name=&quot;m11&quot;&gt;The value to assig [остаток строки не уместился]&quot;;.
+        ///      &lt;param name=&quot;m11&quot;&gt;The value to assign to the [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string System_Numerics_Vectors1 {
             get {
@@ -483,7 +491,8 @@ namespace WpfApp1.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&lt;doc&gt;
+        ///   Ищет локализованную строку, похожую на &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;doc&gt;
         ///  &lt;assembly&gt;
         ///    &lt;name&gt;System.Runtime.CompilerServices.Unsafe&lt;/name&gt;
         ///  &lt;/assembly&gt;
@@ -493,7 +502,7 @@ namespace WpfApp1.Properties {
         ///    &lt;/member&gt;
         ///    &lt;member name=&quot;M:System.Runtime.CompilerServices.Unsafe.Add``1(``0@,System.Int32)&quot;&gt;
         ///      &lt;summary&gt;Adds an element offset to the given reference.&lt;/summary&gt;
-        ///      &lt;param name=&quot;source&quot;&gt;The refe [остаток строки не уместился]&quot;;.
+        ///      &lt;param name=&quot;source&quot;&gt;The re [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string System_Runtime_CompilerServices_Unsafe1 {
             get {
@@ -508,6 +517,27 @@ namespace WpfApp1.Properties {
             get {
                 object obj = ResourceManager.GetObject("System_Text_Encoding_CodePages", resourceCulture);
                 return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;doc&gt;
+        ///  &lt;assembly&gt;
+        ///    &lt;name&gt;System.Text.Encoding.CodePages&lt;/name&gt;
+        ///  &lt;/assembly&gt;
+        ///  &lt;members&gt;
+        ///    &lt;member name=&quot;T:System.Text.CodePagesEncodingProvider&quot;&gt;
+        ///      &lt;summary&gt;Provides access to an encoding provider for code pages that otherwise are available only in the desktop .NET Framework.&lt;/summary&gt;
+        ///    &lt;/member&gt;
+        ///    &lt;member name=&quot;M:System.Text.CodePagesEncodingProvider.GetEncoding(System.Int32)&quot;&gt;
+        ///      &lt;param name=&quot;codepage&quot; /&gt;
+        ///    &lt;/member&gt;
+        ///    &lt;member name= [остаток строки не уместился]&quot;;.
+        /// </summary>
+        internal static string System_Text_Encoding_CodePages1 {
+            get {
+                return ResourceManager.GetString("System_Text_Encoding_CodePages1", resourceCulture);
             }
         }
         

@@ -119,102 +119,108 @@
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="AngleSharp" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\AngleSharp.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\bin\x64\Debug\AngleSharp.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="AngleSharp1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\AngleSharp.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+    <value>..\bin\x64\Debug\AngleSharp.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
-  <data name="CrewingCompanies1_1_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\CrewingCompanies1.1.01.pdb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="Companies" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\x64\Debug\Companies.sqlite3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="EntityFramework" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\EntityFramework.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\bin\x64\Debug\EntityFramework.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="EntityFramework1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\EntityFramework.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\bin\x64\Debug\EntityFramework.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="EntityFramework_SqlServer" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\EntityFramework.SqlServer.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\bin\x64\Debug\EntityFramework.SqlServer.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="EntityFramework_SqlServer1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\EntityFramework.SqlServer.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\bin\x64\Debug\EntityFramework.SqlServer.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="MaterialDesignColors" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\MaterialDesignColors.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\bin\x64\Debug\MaterialDesignColors.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="MaterialDesignColors1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\MaterialDesignColors.pdb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\bin\x64\Debug\MaterialDesignColors.pdb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="MaterialDesignThemes_Wpf" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\MaterialDesignThemes.Wpf.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\bin\x64\Debug\MaterialDesignThemes.Wpf.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="MaterialDesignThemes_Wpf1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\MaterialDesignThemes.Wpf.pdb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\bin\x64\Debug\MaterialDesignThemes.Wpf.pdb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="MaterialDesignThemes_Wpf2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\MaterialDesignThemes.Wpf.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+    <value>..\bin\x64\Debug\MaterialDesignThemes.Wpf.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="Microsoft_Data_Sqlite" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\Microsoft.Data.Sqlite.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\bin\x64\Debug\Microsoft.Data.Sqlite.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="Microsoft_Data_Sqlite1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\Microsoft.Data.Sqlite.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+    <value>..\bin\x64\Debug\Microsoft.Data.Sqlite.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="sqlite3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\x64\Debug\sqlite3.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="SQLitePCLRaw_batteries_v2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\SQLitePCLRaw.batteries_v2.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\bin\x64\Debug\SQLitePCLRaw.batteries_v2.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="SQLitePCLRaw_core" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\SQLitePCLRaw.core.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\bin\x64\Debug\SQLitePCLRaw.core.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="SQLitePCLRaw_nativelibrary" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\SQLitePCLRaw.nativelibrary.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\bin\x64\Debug\SQLitePCLRaw.nativelibrary.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="SQLitePCLRaw_provider_dynamic_cdecl" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\SQLitePCLRaw.provider.dynamic_cdecl.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\bin\x64\Debug\SQLitePCLRaw.provider.dynamic_cdecl.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="System_Buffers" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\System.Buffers.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\bin\x64\Debug\System.Buffers.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="System_Buffers1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\System.Buffers.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\bin\x64\Debug\System.Buffers.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="System_Data_SQLite" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\System.Data.SQLite.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\bin\x64\Debug\System.Data.SQLite.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="System_Data_SQLite1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\System.Data.SQLite.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+    <value>..\bin\x64\Debug\System.Data.SQLite.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="System_Data_SQLite_dll" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\System.Data.SQLite.dll.config;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+    <value>..\bin\x64\Debug\System.Data.SQLite.dll.config;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="System_Data_SQLite_EF6" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\System.Data.SQLite.EF6.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\bin\x64\Debug\System.Data.SQLite.EF6.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="System_Data_SQLite_Linq" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\System.Data.SQLite.Linq.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\bin\x64\Debug\System.Data.SQLite.Linq.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="System_Memory" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\System.Memory.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\bin\x64\Debug\System.Memory.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="System_Memory1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\System.Memory.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\bin\x64\Debug\System.Memory.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="System_Numerics_Vectors" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\System.Numerics.Vectors.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\bin\x64\Debug\System.Numerics.Vectors.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="System_Numerics_Vectors1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\System.Numerics.Vectors.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\bin\x64\Debug\System.Numerics.Vectors.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="System_Runtime_CompilerServices_Unsafe" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\bin\x64\Debug\System.Runtime.CompilerServices.Unsafe.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="System_Runtime_CompilerServices_Unsafe1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\bin\x64\Debug\System.Runtime.CompilerServices.Unsafe.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="System_Text_Encoding_CodePages" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\System.Text.Encoding.CodePages.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\bin\x64\Debug\System.Text.Encoding.CodePages.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="System_Text_Encoding_CodePages1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\x64\Debug\System.Text.Encoding.CodePages.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="WhatsAppApi" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\WhatsAppApi.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\bin\x64\Debug\WhatsAppApi.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

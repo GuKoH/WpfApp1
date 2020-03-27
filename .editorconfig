@@ -1,0 +1,19 @@
+﻿[*.cs]
+
+# CS0168: Переменная объявлена, но не используется
+dotnet_diagnostic.CS0168.severity = suggestion
+
+# CA2100: Review SQL queries for security vulnerabilities
+dotnet_diagnostic.CA2100.severity = none
+
+# CA1062: Проверить аргументы или открытые методы
+dotnet_diagnostic.CA1062.severity = none
+
+# CA1031: Не перехватывать исключения общих типов
+dotnet_diagnostic.CA1031.severity = none
+
+# CA1001: Типы, владеющие высвобождаемыми полями, должны быть высвобождаемыми
+dotnet_diagnostic.CA1001.severity = none
+
+# CA1303: Не передавать литералы в качестве локализованных параметров
+dotnet_diagnostic.CA1303.severity = none
